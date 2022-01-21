@@ -3,6 +3,7 @@ package com.uniqueAndroid.ximalaya.base;
 import android.app.Application;
 import android.content.Context;
 
+import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.DeviceInfoProviderDefault;
@@ -17,6 +18,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         CommonRequest mXimalaya = CommonRequest.getInstanse();
+        LogUtil.init(this.getPackageName(),false);
         if(DTransferConstants.isRelease) {
             String mAppSecret = "8646d66d6abe2efd14f2891f9fd1c8af";
             mXimalaya.setAppkey("9f9ef8f10bebeaa83e71e62f935bede8");

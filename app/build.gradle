@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.uniqueAndroid.ximalaya"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -54,4 +54,6 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'com.github.hackware1993:MagicIndicator:1.6.0' // for support lib
+    implementation 'com.github.hackware1993:MagicIndicator:1.7.0' // for androidx
 }
