@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.uniqueAndroid.ximalaya.R;
 import com.uniqueAndroid.ximalaya.adapters.RecommendListAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseFragment;
+import com.uniqueAndroid.ximalaya.interfaces.IRecommendViewCallback;
+import com.uniqueAndroid.ximalaya.presenters.RecommendPresenter;
 import com.uniqueAndroid.ximalaya.utils.Constants;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
@@ -27,11 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecommendFragment extends BaseFragment {
+public class RecommendFragment extends BaseFragment implements IRecommendViewCallback {
     private static final String TAG = "RecommendFragment";
     private View rootView;
     private RecyclerView recommendRv;
     private RecommendListAdapter recommendListAdapter;
+    private RecommendPresenter mRecommendPresenter;
 
     @Override
     protected View onSubViewLoaded(LayoutInflater layoutInflater, ViewGroup container) {
@@ -52,7 +55,11 @@ public class RecommendFragment extends BaseFragment {
         });
         recommendListAdapter = new RecommendListAdapter();
         recommendRv.setAdapter(recommendListAdapter);
-        getRecommendData();
+        //获取到逻辑层到对象
+        mRecommendPresenter = RecommendPresenter.getInstance();
+        //先要设置通知接口到注册
+        mRecommendPresenter.registerViewCallback(this);
+        mRecommendPresenter.getRecommendList();
         return rootView;
     }
 
@@ -80,5 +87,31 @@ public class RecommendFragment extends BaseFragment {
 
     private void updateRecommendUI(List<Album> albumList) {
         recommendListAdapter.setData(albumList);
+    }
+
+    @Override
+    public void onRecommendListLoaded(List<Album> result) {
+        //当我们获取到推荐内容时，这个方法就会被调用
+        //数据回来就更新UI
+        recommendListAdapter.setData(result);
+    }
+
+    @Override
+    public void onLoaderMore(List<Album> result) {
+
+    }
+
+    @Override
+    public void onRefreshMore(List<Album> result) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //取消接口的注册
+        if (mRecommendPresenter != null) {
+            mRecommendPresenter.unRegisterViewCallback(this);
+        }
     }
 }
