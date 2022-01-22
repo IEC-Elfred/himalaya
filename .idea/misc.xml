@@ -5,10 +5,12 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.375" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.30885416666666665" />
+        <entry key="app/src/main/res/drawable/shape_album_item_bg.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14114583333333333" />
         <entry key="app/src/main/res/layout/fragment_history.xml" value="0.12952898550724637" />
         <entry key="app/src/main/res/layout/fragment_recommend.xml" value="0.12952898550724637" />
         <entry key="app/src/main/res/layout/fragment_subscription.xml" value="0.12952898550724637" />
+        <entry key="app/src/main/res/layout/item_recommend.xml" value="0.1" />
       </map>
     </option>
   </component>

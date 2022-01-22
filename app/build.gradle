@@ -51,6 +51,7 @@ dependencies {
     implementation files('libs/TingPhoneOpenSDK_7.5.9.jar')
     implementation files('libs/XmDownload_2.0.jar')
     implementation files('libs/XmlyOAuth2SDK_V2.0.jar')
+    implementation 'com.squareup.picasso:picasso:2.71828'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
