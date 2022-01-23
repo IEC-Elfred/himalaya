@@ -1,6 +1,7 @@
 package com.uniqueAndroid.ximalaya.adapters;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecommendListAdapter extends RecyclerView.Adapter<RecommendListAdapter.InnerHolder> {
+    private static final String TAG = "RecommendListAdapter";
     private List<Album> mData = new ArrayList<>();
+    private onRecommendItemClickListener mItemClickListner;
 
     @SuppressLint("NotifyDataSetChanged")
     public void setData(List<Album> albumList) {
@@ -41,6 +44,16 @@ public class RecommendListAdapter extends RecyclerView.Adapter<RecommendListAdap
     public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
         //设置数据
         holder.itemView.setTag(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mItemClickListner != null) {
+                    mItemClickListner.onItemclick((Integer) v.getTag());
+                    Log.d(TAG, "itemClick --->" + v.getTag());
+
+                }
+            }
+        });
         holder.setData(mData.get(position));
     }
 
@@ -78,5 +91,13 @@ public class RecommendListAdapter extends RecyclerView.Adapter<RecommendListAdap
 
             Picasso.get().load(album.getCoverUrlLarge()).into(albumCoverIv);
         }
+    }
+
+    public void setOnRecommendItemClickListner(onRecommendItemClickListener listener) {
+        this.mItemClickListner = listener;
+    }
+
+    public interface onRecommendItemClickListener {
+        void onItemclick(int position);
     }
 }

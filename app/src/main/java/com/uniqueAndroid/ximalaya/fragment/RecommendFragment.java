@@ -1,6 +1,7 @@
 package com.uniqueAndroid.ximalaya.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.uniqueAndroid.ximalaya.DetailActivity;
 import com.uniqueAndroid.ximalaya.R;
 import com.uniqueAndroid.ximalaya.adapters.RecommendListAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseFragment;
@@ -30,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener {
+public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener, RecommendListAdapter.onRecommendItemClickListener {
     private static final String TAG = "RecommendFragment";
     private View rootView;
     private RecyclerView recommendRv;
@@ -78,6 +80,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         });
         recommendListAdapter = new RecommendListAdapter();
         recommendRv.setAdapter(recommendListAdapter);
+        recommendListAdapter.setOnRecommendItemClickListner(this);
         return rootView;
     }
 
@@ -159,5 +162,13 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         if (mRecommendPresenter != null) {
             mRecommendPresenter.getRecommendList();
         }
+    }
+
+
+    @Override
+    public void onItemclick(int position) {
+        //item被点击，跳转到详情界面
+        Intent intent = new Intent(getContext(), DetailActivity.class);
+        startActivity(intent);
     }
 }
