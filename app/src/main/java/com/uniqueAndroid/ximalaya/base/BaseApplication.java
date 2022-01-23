@@ -2,6 +2,7 @@ package com.uniqueAndroid.ximalaya.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
 
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
@@ -12,6 +13,7 @@ import com.ximalaya.ting.android.opensdk.datatrasfer.IDeviceInfoProvider;
 public class BaseApplication extends Application {
     public static final String REFRESH_TOKEN_URL = "https://api.ximalaya.com/oauth2/refresh_token?";
     private static final String KEY_LAST_OAID = "last_oaid";
+    private static Handler sHandler = null;
 
     private String oaid;
     @Override
@@ -30,6 +32,7 @@ public class BaseApplication extends Application {
             mXimalaya.setPackid("com.ximalaya.qunfeng");
             mXimalaya.init(this ,mAppSecret, getDeviceInfoProvider(this));
         }
+        sHandler = new Handler();
     }
 
     public IDeviceInfoProvider getDeviceInfoProvider(Context context) {
@@ -40,6 +43,10 @@ public class BaseApplication extends Application {
                 return oaid;
             }
         };
+    }
+
+    public static Handler getsHandler(){
+        return sHandler;
     }
 
 }

@@ -42,6 +42,7 @@ public class RecommendPresenter implements IRecommendPresenter {
 
     @Override
     public void getRecommendList() {
+        updateLoading();
         Map<String, String> map = new HashMap<String, String>();
         map.put(DTransferConstants.LIKE_COUNT, Constants.RECOMMEND_COUNT + "");
         CommonRequest.getGuessLikeAlbum(map, new IDataCallBack<GussLikeAlbumList>() {
@@ -60,17 +61,37 @@ public class RecommendPresenter implements IRecommendPresenter {
             public void onError(int i, String s) {
                 LogUtil.d(TAG, "error----->" + i);
                 LogUtil.d(TAG, "errorMsg----->" + s);
+                handleError();
             }
         });
     }
 
-
-    private void handlerRecommendResult(List<Album> albumList) {
-        //通知UI更新
+    private void handleError() {
         if (callbacks != null) {
             for (IRecommendViewCallback callback : callbacks) {
-                callback.onRecommendListLoaded(albumList);
+                callback.onNetworkError();
             }
+        }
+    }
+
+
+    private void handlerRecommendResult(List<Album> albumList) {
+        if (albumList != null) {
+            if (albumList.size() == 0) {
+                for (IRecommendViewCallback callback : callbacks) {
+                    callback.onEmpty();
+                }
+            } else {
+                for (IRecommendViewCallback callback : callbacks) {
+                    callback.onRecommendListLoaded(albumList);
+                }
+            }
+        }
+    }
+
+    private void updateLoading() {
+        for (IRecommendViewCallback callback : callbacks) {
+            callback.onLoading();
         }
     }
 
