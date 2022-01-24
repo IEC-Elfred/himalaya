@@ -18,4 +18,6 @@ public interface IAlbumDetailViewCallback {
      * @param album
      */
     void  onAlbumLoaded(Album album);
+
+    void onNetworkError(int errorCode, String errorMsg);
 }
