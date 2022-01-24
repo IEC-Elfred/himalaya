@@ -8,7 +8,8 @@
         <entry key="app/src/main/res/drawable/ic_baseline_play_arrow.xml" value="0.17083333333333334" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.30885416666666665" />
         <entry key="app/src/main/res/drawable/shape_album_item_bg.xml" value="0.2" />
-        <entry key="app/src/main/res/layout/activity_detail.xml" value="0.18931159420289856" />
+        <entry key="app/src/main/res/drawable/shape_subscription_bg.xml" value="0.17037037037037037" />
+        <entry key="app/src/main/res/layout/activity_detail.xml" value="0.14091470951792337" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14114583333333333" />
         <entry key="app/src/main/res/layout/fragment_empty_view.xml" value="0.18931159420289856" />
         <entry key="app/src/main/res/layout/fragment_history.xml" value="0.12952898550724637" />
@@ -16,6 +17,7 @@
         <entry key="app/src/main/res/layout/fragment_network_error_view.xml" value="0.18931159420289856" />
         <entry key="app/src/main/res/layout/fragment_recommend.xml" value="0.12952898550724637" />
         <entry key="app/src/main/res/layout/fragment_subscription.xml" value="0.12952898550724637" />
+        <entry key="app/src/main/res/layout/item_detail_layout.xml" value="0.3968609865470852" />
         <entry key="app/src/main/res/layout/item_recommend.xml" value="0.1" />
       </map>
     </option>

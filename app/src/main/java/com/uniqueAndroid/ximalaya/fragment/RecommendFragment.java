@@ -16,6 +16,7 @@ import com.uniqueAndroid.ximalaya.R;
 import com.uniqueAndroid.ximalaya.adapters.RecommendListAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseFragment;
 import com.uniqueAndroid.ximalaya.interfaces.IRecommendViewCallback;
+import com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter;
 import com.uniqueAndroid.ximalaya.presenters.RecommendPresenter;
 import com.uniqueAndroid.ximalaya.utils.Constants;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
@@ -86,7 +87,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 
     private void getRecommendData() {
         Map<String, String> map = new HashMap<String, String>();
-        map.put(DTransferConstants.LIKE_COUNT, Constants.RECOMMEND_COUNT + "");
+        map.put(DTransferConstants.LIKE_COUNT, Constants.COUNT_RECOMMEND + "");
         CommonRequest.getGuessLikeAlbum(map, new IDataCallBack<GussLikeAlbumList>() {
             @Override
             public void onSuccess(GussLikeAlbumList gussLikeAlbumList) {
@@ -166,7 +167,8 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 
 
     @Override
-    public void onItemclick(int position) {
+    public void onItemclick(int position, Album album) {
+        AlbumDetailPresenter.getInstance().setTargetAlbum(album);
         //item被点击，跳转到详情界面
         Intent intent = new Intent(getContext(), DetailActivity.class);
         startActivity(intent);
