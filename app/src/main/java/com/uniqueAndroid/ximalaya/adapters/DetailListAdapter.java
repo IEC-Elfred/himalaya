@@ -1,12 +1,10 @@
 package com.uniqueAndroid.ximalaya.adapters;
 
 import android.os.Build;
-import android.telephony.ims.ImsMmTelManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -55,7 +53,8 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.In
             @Override
             public void onClick(View v) {
                 if (mItemClickListner != null) {
-                    mItemClickListner.onItemClick();
+                    //参数需要有数据和位置
+                    mItemClickListner.onItemClick(mDetailData,position);
                 }
             }
         });
@@ -83,6 +82,6 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.In
     }
 
     public interface ItemClickListener {
-        void onItemClick();
+        void onItemClick(List<Track> detailData, int position);
     }
 }

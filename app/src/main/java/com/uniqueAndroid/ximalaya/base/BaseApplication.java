@@ -9,11 +9,15 @@ import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.DeviceInfoProviderDefault;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDeviceInfoProvider;
+import com.ximalaya.ting.android.opensdk.player.XmPlayerManager;
 
 public class BaseApplication extends Application {
     public static final String REFRESH_TOKEN_URL = "https://api.ximalaya.com/oauth2/refresh_token?";
     private static final String KEY_LAST_OAID = "last_oaid";
     private static Handler sHandler = null;
+
+    //dialog的context不能用这个
+    private static Context sContext;
 
     private String oaid;
     @Override
@@ -32,7 +36,10 @@ public class BaseApplication extends Application {
             mXimalaya.setPackid("com.ximalaya.qunfeng");
             mXimalaya.init(this ,mAppSecret, getDeviceInfoProvider(this));
         }
+        XmPlayerManager.getInstance(this).init();
         sHandler = new Handler();
+
+        sContext = getBaseContext();
     }
 
     public IDeviceInfoProvider getDeviceInfoProvider(Context context) {
@@ -47,6 +54,10 @@ public class BaseApplication extends Application {
 
     public static Handler getsHandler(){
         return sHandler;
+    }
+
+    public static Context getAppContext() {
+        return sContext;
     }
 
 }

@@ -1,7 +1,6 @@
 package com.uniqueAndroid.ximalaya;
 
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -26,6 +25,7 @@ import com.uniqueAndroid.ximalaya.adapters.DetailListAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseActivity;
 import com.uniqueAndroid.ximalaya.interfaces.IAlbumDetailViewCallback;
 import com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter;
+import com.uniqueAndroid.ximalaya.presenters.PlayerPresenter;
 import com.uniqueAndroid.ximalaya.utils.ImageBlur;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.uniqueAndroid.ximalaya.views.UILoader;
@@ -125,7 +125,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     @Override
     public void onAlbumLoaded(Album album) {
         long id = album.getId();
-        LogUtil.d(TAG,"Album --->" + id);
+        LogUtil.d(TAG, "Album --->" + id);
         mCurrentId = id;
         //获取专辑的详情内容
         if (albumDetailPresenter != null) {
@@ -184,8 +184,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     }
 
     @Override
-    public void onItemClick() {
-        Intent intent = new Intent(this,PlayerActivity.class);
+    public void onItemClick(List<Track> detailData, int position) {
+        // 设置播放器的数据
+        PlayerPresenter playerPresenter = PlayerPresenter.getPlayerPresenter();
+        playerPresenter.setPlayList(detailData, position);
+        Intent intent = new Intent(this, PlayerActivity.class);
         startActivity(intent);
     }
 }
