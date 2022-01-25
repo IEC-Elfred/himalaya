@@ -1,7 +1,9 @@
 package com.uniqueAndroid.ximalaya;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Trace;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -38,17 +40,17 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     private TextView mTrackTitleTv;
     private PlayerTrackPagerAdapter mTrackPagerAdapter;
     private ViewPager mTrackPageView;
+    private boolean mIsUserSlidePager = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        initView();
         mPlayerPresenter = PlayerPresenter.getPlayerPresenter();
         mPlayerPresenter.registerViewCallback(this);
+        initView();
         mPlayerPresenter.getPlayList();
         initEvent();
-        startPlay();
     }
 
     @Override
@@ -60,15 +62,11 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         }
     }
 
-    private void startPlay() {
-        if (mPlayerPresenter != null) {
-            mPlayerPresenter.play();
-        }
-    }
 
     /**
      * 给控件设置相关的事件
      */
+    @SuppressLint("ClickableViewAccessibility")
     private void initEvent() {
         mControlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,9 +102,9 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mPlayPreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtil.d(TAG,"click pre btn");
+                LogUtil.d(TAG, "click pre btn");
                 if (mPlayerPresenter != null) {
-                    LogUtil.d(TAG,"click pre btn");
+                    LogUtil.d(TAG, "click pre btn");
                     mPlayerPresenter.playPre();
                 }
             }
@@ -116,9 +114,45 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
             @Override
             public void onClick(View v) {
                 if (mPlayerPresenter != null) {
-                    LogUtil.d(TAG,"click next btn");
+                    LogUtil.d(TAG, "click next btn");
                     mPlayerPresenter.playNext();
                 }
+            }
+        });
+
+        mTrackPageView.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                LogUtil.d(TAG, "position--->" + position);
+                //当页面选中当时候切换播放内容
+                if (mPlayerPresenter != null && mIsUserSlidePager) {
+                    mPlayerPresenter.playByIndex(position);
+                }
+                mIsUserSlidePager = false;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mTrackPageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        mIsUserSlidePager = true;
+                        break;
+                }
+
+                return false;
             }
         });
     }
@@ -175,7 +209,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 
     @Override
     public void onListLoaded(List<Track> list) {
-        LogUtil.d(TAG,"list --->" + list);
+        LogUtil.d(TAG, "list --->" + list);
         if (mTrackPagerAdapter != null) {
             mTrackPagerAdapter.setData(list);
         }
@@ -190,7 +224,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     public void onProgressChange(long currentDuration, long total) {
         String totalDuration;
         String currentPosition;
-        mSeekBar.setMax((int)total);
+        mSeekBar.setMax((int) total);
         if (total > 1000 * 60 * 60) {
             totalDuration = hourFormat.format(total);
             currentPosition = hourFormat.format(currentDuration);
@@ -220,10 +254,13 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     }
 
     @Override
-    public void onTrackTitleUpdate(Track track) {
+    public void onTrackTitleUpdate(Track track, int playIndex) {
         if (mTrackTitleTv != null) {
             mTrackTitleTv.setText(track.getTrackTitle());
         }
         //当节目改变当时候，我们就获取当前播放中当位置
+        if (mTrackPageView != null) {
+            mTrackPageView.setCurrentItem(playIndex, true);
+        }
     }
 }
