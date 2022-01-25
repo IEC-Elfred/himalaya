@@ -51,7 +51,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
             isPlayerListSet = true;
             mPlayerManager.setPlayList(list, playIndex);
         } else {
-            LogUtil.d(TAG,"mPlayerManager is null");
+            LogUtil.d(TAG, "mPlayerManager is null");
         }
     }
 
@@ -70,7 +70,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     @Override
     public void play() {
         if (isPlayerListSet) {
-            LogUtil.d(TAG,"Play!!!");
+            LogUtil.d(TAG, "Play!!!");
             mPlayerManager.play();
         }
     }
@@ -114,7 +114,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void seekTo(int progress) {
-
+        mPlayerManager.seekTo(progress);
     }
 
     @Override
@@ -128,44 +128,44 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void onStartGetAdsInfo() {
-        LogUtil.d(TAG,"onStartGetAdsInfo");
+        LogUtil.d(TAG, "onStartGetAdsInfo");
     }
 
     @Override
     public void onGetAdsInfo(AdvertisList advertisList) {
-        LogUtil.d(TAG,"onGetAdsInfo");
+        LogUtil.d(TAG, "onGetAdsInfo");
     }
 
     @Override
     public void onAdsStartBuffering() {
-        LogUtil.d(TAG,"onAdsStartBuffering");
+        LogUtil.d(TAG, "onAdsStartBuffering");
     }
 
     @Override
     public void onAdsStopBuffering() {
-        LogUtil.d(TAG,"onAdsStopBuffering");
+        LogUtil.d(TAG, "onAdsStopBuffering");
     }
 
     @Override
     public void onStartPlayAds(Advertis advertis, int i) {
-        LogUtil.d(TAG,"onStartPlayAds");
+        LogUtil.d(TAG, "onStartPlayAds");
     }
 
     @Override
     public void onCompletePlayAds() {
-        LogUtil.d(TAG,"onCompletePlayAds");
+        LogUtil.d(TAG, "onCompletePlayAds");
     }
 
     @Override
     public void onError(int i, int i1) {
-        LogUtil.d(TAG,"errorCode" + i + "extraInfo" + i1);
+        LogUtil.d(TAG, "errorCode" + i + "extraInfo" + i1);
     }
 
     //========播放器相关==========
 
     @Override
     public void onPlayStart() {
-        LogUtil.d(TAG,"onPlayStart");
+        LogUtil.d(TAG, "onPlayStart");
         for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
             iPlayerCallback.onPlayStart();
         }
@@ -173,7 +173,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void onPlayPause() {
-        LogUtil.d(TAG,"onPlayPause");
+        LogUtil.d(TAG, "onPlayPause");
         for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
             iPlayerCallback.onPlayPause();
         }
@@ -181,7 +181,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void onPlayStop() {
-        LogUtil.d(TAG,"onPlayStop");
+        LogUtil.d(TAG, "onPlayStop");
         for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
             iPlayerCallback.onPlayStop();
         }
@@ -189,44 +189,47 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void onSoundPlayComplete() {
-        LogUtil.d(TAG,"onSoundPlayComplete");
+        LogUtil.d(TAG, "onSoundPlayComplete");
     }
 
     @Override
     public void onSoundPrepared() {
-        LogUtil.d(TAG,"onSoundPrepared");
+        LogUtil.d(TAG, "onSoundPrepared");
     }
 
     @Override
     public void onSoundSwitch(PlayableModel playableModel, PlayableModel playableModel1) {
-        LogUtil.d(TAG,"onSoundSwitch");
+        LogUtil.d(TAG, "onSoundSwitch");
     }
 
 
     @Override
     public void onBufferingStart() {
-        LogUtil.d(TAG,"onBufferingStart");
+        LogUtil.d(TAG, "onBufferingStart");
     }
 
     @Override
     public void onBufferingStop() {
-        LogUtil.d(TAG,"onBufferingStop");
+        LogUtil.d(TAG, "onBufferingStop");
     }
 
 
     @Override
     public void onBufferProgress(int i) {
-        LogUtil.d(TAG,"onBufferProgress" + i);
+        LogUtil.d(TAG, "onBufferProgress" + i);
     }
 
     @Override
     public void onPlayProgress(int currentPos, int duration) {
-        LogUtil.d(TAG,"onPlayProgress");
+        for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
+            iPlayerCallback.onProgressChange(currentPos, duration);
+        }
+        LogUtil.d(TAG, "onPlayProgress--->" + currentPos + "duration -- >" + duration);
     }
 
     @Override
     public boolean onError(XmPlayerException e) {
-        LogUtil.d(TAG,"Exception------->" + e);
+        LogUtil.d(TAG, "Exception------->" + e);
         return false;
     }
 
