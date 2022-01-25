@@ -26,7 +26,7 @@ public interface IPlayerCallback {
      *
      * @param list
      */
-    void onListLoaded(List<Trace> list);
+    void onListLoaded(List<Track> list);
 
     /**
      * 播放器模式改变
@@ -43,4 +43,10 @@ public interface IPlayerCallback {
     void onAdLoading();
 
     void onAdFinished();
+
+    /**
+     * 更新当前节目的标题
+     * @param track
+     */
+    void onTrackTitleUpdate(Track track);
 }

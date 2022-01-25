@@ -18,10 +18,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.uniqueAndroid.ximalaya.adapters.DetailListAdapter;
+import com.uniqueAndroid.ximalaya.adapters.PlayerTrackPagerAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseActivity;
 import com.uniqueAndroid.ximalaya.interfaces.IAlbumDetailViewCallback;
 import com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter;
@@ -82,8 +84,6 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         smallCover = this.findViewById(R.id.iv_small_cover);
         albumTitle = this.findViewById(R.id.tv_album_title);
         albumAuthor = this.findViewById(R.id.tv_album_author);
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

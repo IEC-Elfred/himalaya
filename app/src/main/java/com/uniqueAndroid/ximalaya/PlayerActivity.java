@@ -8,7 +8,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 
+import com.uniqueAndroid.ximalaya.adapters.PlayerTrackPagerAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseActivity;
 import com.uniqueAndroid.ximalaya.interfaces.IPlayerCallback;
 import com.uniqueAndroid.ximalaya.presenters.PlayerPresenter;
@@ -31,14 +33,20 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     private SeekBar mSeekBar;
     private int mCurrentProgress = 0;
     private boolean mIsUserTouchProgressBar = false;
+    private ImageView mPlayNextBtn;
+    private ImageView mPlayPreBtn;
+    private TextView mTrackTitleTv;
+    private PlayerTrackPagerAdapter mTrackPagerAdapter;
+    private ViewPager mTrackPageView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        initView();
         mPlayerPresenter = PlayerPresenter.getPlayerPresenter();
         mPlayerPresenter.registerViewCallback(this);
-        initView();
+        mPlayerPresenter.getPlayList();
         initEvent();
         startPlay();
     }
@@ -92,6 +100,27 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
                 mPlayerPresenter.seekTo(mCurrentProgress);
             }
         });
+
+        mPlayPreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogUtil.d(TAG,"click pre btn");
+                if (mPlayerPresenter != null) {
+                    LogUtil.d(TAG,"click pre btn");
+                    mPlayerPresenter.playPre();
+                }
+            }
+        });
+
+        mPlayNextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPlayerPresenter != null) {
+                    LogUtil.d(TAG,"click next btn");
+                    mPlayerPresenter.playNext();
+                }
+            }
+        });
     }
 
     //找到各个控件
@@ -100,6 +129,12 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mTotalDuration = this.findViewById(R.id.track_duration);
         mCurrentPosition = this.findViewById(R.id.current_position);
         mSeekBar = this.findViewById(R.id.track_seek_bar);
+        mPlayNextBtn = this.findViewById(R.id.play_next);
+        mPlayPreBtn = this.findViewById(R.id.play_pre);
+        mTrackTitleTv = this.findViewById(R.id.track_title);
+        mTrackPageView = this.findViewById(R.id.track_pager_view);
+        mTrackPagerAdapter = new PlayerTrackPagerAdapter();
+        mTrackPageView.setAdapter(mTrackPagerAdapter);
     }
 
     @Override
@@ -139,8 +174,11 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     }
 
     @Override
-    public void onListLoaded(List<Trace> list) {
-
+    public void onListLoaded(List<Track> list) {
+        LogUtil.d(TAG,"list --->" + list);
+        if (mTrackPagerAdapter != null) {
+            mTrackPagerAdapter.setData(list);
+        }
     }
 
     @Override
@@ -179,5 +217,13 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     @Override
     public void onAdFinished() {
 
+    }
+
+    @Override
+    public void onTrackTitleUpdate(Track track) {
+        if (mTrackTitleTv != null) {
+            mTrackTitleTv.setText(track.getTrackTitle());
+        }
+        //当节目改变当时候，我们就获取当前播放中当位置
     }
 }
