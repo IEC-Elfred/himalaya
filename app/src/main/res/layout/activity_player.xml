@@ -78,6 +78,7 @@
                 android:src="@drawable/ic_baseline_skip_previous_24"
                 android:layout_weight="1"/>
             <ImageView
+                android:id="@+id/play_or_pause_btn"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_baseline_play_circle_outline_24"

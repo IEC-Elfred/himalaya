@@ -22,4 +22,6 @@ public interface IPlayerPresenter extends IBasePresenter<IPlayerCallback> {
     void playByIndex(int index);
 
     void seekTo(int progress);
+
+    boolean isPlay();
 }
