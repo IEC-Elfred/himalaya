@@ -1,6 +1,8 @@
 package com.uniqueAndroid.ximalaya.interfaces;
 
-public interface IRecommendPresenter {
+import com.uniqueAndroid.ximalaya.base.IBasePresenter;
+
+public interface IRecommendPresenter extends IBasePresenter<IRecommendViewCallback> {
     /**
      * 获取推荐内容
      */
@@ -16,15 +18,5 @@ public interface IRecommendPresenter {
      */
     void loadMore();
 
-    /**
-     * 注册UI回调
-     * @param callback
-     */
-    void registerViewCallback(IRecommendViewCallback callback);
-
-    /**
-     * 取消UI回调注册
-     */
-    void unRegisterViewCallback(IRecommendViewCallback callback);
 
 }

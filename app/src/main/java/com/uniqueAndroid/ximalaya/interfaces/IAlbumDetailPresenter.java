@@ -1,6 +1,8 @@
 package com.uniqueAndroid.ximalaya.interfaces;
 
-public interface IAlbumDetailPresenter {
+import com.uniqueAndroid.ximalaya.base.IBasePresenter;
+
+public interface IAlbumDetailPresenter extends IBasePresenter<IAlbumDetailViewCallback> {
 
     /**
      * 下拉刷新更多内容
@@ -17,7 +19,5 @@ public interface IAlbumDetailPresenter {
      */
     void getAlbumDetail(int albumID, int page);
 
-    void registerViewCallback(IAlbumDetailViewCallback albumDetailViewCallback);
 
-    void unRegisterViewCallback(IAlbumDetailViewCallback albumDetailViewCallback);
 }

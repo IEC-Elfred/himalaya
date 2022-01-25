@@ -1,10 +1,12 @@
 package com.uniqueAndroid.ximalaya.adapters;
 
 import android.os.Build;
+import android.telephony.ims.ImsMmTelManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -23,6 +25,7 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.In
     //格式化时间
     private SimpleDateFormat mUpdateDateFormat = new SimpleDateFormat("YYYY-MM-dd");
     private SimpleDateFormat mDurationFormat = new SimpleDateFormat("mm:ss");
+    private ItemClickListener mItemClickListner = null;
 
     @NonNull
     @Override
@@ -48,6 +51,14 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.In
         durationTv.setText(duration);
         String updateTimeTv = mUpdateDateFormat.format(track.getUpdatedAt());
         updateDateTv.setText(updateTimeTv);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mItemClickListner != null) {
+                    mItemClickListner.onItemClick();
+                }
+            }
+        });
     }
 
     @Override
@@ -65,5 +76,13 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.In
         public InnerHolder(@NonNull View itemView) {
             super(itemView);
         }
+    }
+
+    public void setItemClickListener(ItemClickListener listener) {
+        this.mItemClickListner = listener;
+    }
+
+    public interface ItemClickListener {
+        void onItemClick();
     }
 }

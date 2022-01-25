@@ -1,5 +1,6 @@
 package com.uniqueAndroid.ximalaya;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -35,7 +36,7 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, UILoader.OnRetryClickListener {
+public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, UILoader.OnRetryClickListener, DetailListAdapter.ItemClickListener {
 
     private static final String TAG = "DetailActivity";
     private ImageView bgCover;
@@ -101,6 +102,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
                 outRect.right = UIUtil.dip2px(view.getContext(), 5);
             }
         });
+        mDetailListAdapter.setItemClickListener(this);
         return detailList;
     }
 
@@ -179,5 +181,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         if (albumDetailPresenter != null) {
             albumDetailPresenter.getAlbumDetail((int) mCurrentId, mCurrentPage);
         }
+    }
+
+    @Override
+    public void onItemClick() {
+        Intent intent = new Intent(this,PlayerActivity.class);
+        startActivity(intent);
     }
 }
