@@ -338,6 +338,9 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         if (mTrackPagerAdapter != null) {
             mTrackPagerAdapter.setData(list);
         }
+        if (mPopWindow != null) {
+            mPopWindow.setListData(list);
+        }
     }
 
     @Override
