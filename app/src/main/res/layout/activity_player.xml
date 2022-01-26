@@ -70,17 +70,18 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/player_mode_switch"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_baseline_menu_open_24" />
+                android:src="@drawable/mode_list" />
 
             <ImageView
                 android:id="@+id/play_pre"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_baseline_skip_previous_24" />
+                android:src="@drawable/selector_player_previous" />
 
             <ImageView
                 android:id="@+id/play_or_pause_btn"
@@ -94,7 +95,7 @@
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_baseline_skip_next_24" />
+                android:src="@drawable/selector_player_next" />
 
             <ImageView
                 android:layout_width="0dp"

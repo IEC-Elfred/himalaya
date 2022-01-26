@@ -21,7 +21,9 @@ import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 
@@ -41,14 +43,31 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     private PlayerTrackPagerAdapter mTrackPagerAdapter;
     private ViewPager mTrackPageView;
     private boolean mIsUserSlidePager = false;
+    private ImageView mPlayModeSwitchBtn;
+    private static Map<XmPlayListControl.PlayMode, XmPlayListControl.PlayMode> sPlayModeRule = new HashMap<>();
+    private XmPlayListControl.PlayMode mCurrentMode = XmPlayListControl.PlayMode.PLAY_MODEL_LIST;
+    //处理播放模式的切换
+
+    /**
+     * 1. 默认是：  PLAY_MODEL_LIST
+     * 2. 列表循环：PLAY_MODEL_LIST_LOOP
+     * 3. 随机播放: PLAY_MODEL_RANDOM
+     * 4. 单曲循环: PLAY_MODEL_SINGLE_LOOP
+     */
+    static {
+        sPlayModeRule.put(XmPlayListControl.PlayMode.PLAY_MODEL_LIST, XmPlayListControl.PlayMode.PLAY_MODEL_LIST_LOOP);
+        sPlayModeRule.put(XmPlayListControl.PlayMode.PLAY_MODEL_LIST_LOOP, XmPlayListControl.PlayMode.PLAY_MODEL_RANDOM);
+        sPlayModeRule.put(XmPlayListControl.PlayMode.PLAY_MODEL_RANDOM, XmPlayListControl.PlayMode.PLAY_MODEL_SINGLE_LOOP);
+        sPlayModeRule.put(XmPlayListControl.PlayMode.PLAY_MODEL_SINGLE_LOOP, XmPlayListControl.PlayMode.PLAY_MODEL_LIST);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        initView();
         mPlayerPresenter = PlayerPresenter.getPlayerPresenter();
         mPlayerPresenter.registerViewCallback(this);
-        initView();
         mPlayerPresenter.getPlayList();
         initEvent();
     }
@@ -155,6 +174,50 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
                 return false;
             }
         });
+
+        mPlayModeSwitchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mPlayModeSwitchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                XmPlayListControl.PlayMode playMode = sPlayModeRule.get(mCurrentMode);
+                if (mPlayerPresenter != null) {
+                    mPlayerPresenter.switchPlayMode(playMode);
+                }
+            }
+        });
+    }
+
+    /**
+     * 根据当前的状态，更新播放模式图标
+     * PLAY_MODEL_LIST
+     * PLAY_MODEL_LIST_LOOP
+     * PLAY_MODEL_RANDOM
+     * PLAY_MODEL_SINGLE_LOOP
+     * @param playMode
+     */
+    private void updatePlayModeBtnImg() {
+        int resId = R.drawable.mode_list;
+        switch (mCurrentMode) {
+            case PLAY_MODEL_LIST:
+                resId = R.drawable.mode_list;
+                break;
+            case PLAY_MODEL_RANDOM:
+                resId = R.drawable.random_loop;
+                break;
+            case PLAY_MODEL_LIST_LOOP:
+                resId = R.drawable.list_loop;
+                break;
+            case PLAY_MODEL_SINGLE_LOOP:
+                resId = R.drawable.single_loop;
+                break;
+        }
+        mPlayModeSwitchBtn.setImageResource(resId);
     }
 
     //找到各个控件
@@ -167,6 +230,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mPlayPreBtn = this.findViewById(R.id.play_pre);
         mTrackTitleTv = this.findViewById(R.id.track_title);
         mTrackPageView = this.findViewById(R.id.track_pager_view);
+        mPlayModeSwitchBtn = this.findViewById(R.id.player_mode_switch);
         mTrackPagerAdapter = new PlayerTrackPagerAdapter();
         mTrackPageView.setAdapter(mTrackPagerAdapter);
     }
@@ -217,7 +281,9 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 
     @Override
     public void onPlayModeChange(XmPlayListControl.PlayMode playMode) {
-
+        //更新播放模式并且修改ui
+        mCurrentMode = playMode;
+        updatePlayModeBtnImg();
     }
 
     @Override
