@@ -1,11 +1,16 @@
 package com.uniqueAndroid.ximalaya;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Trace;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -17,6 +22,7 @@ import com.uniqueAndroid.ximalaya.base.BaseActivity;
 import com.uniqueAndroid.ximalaya.interfaces.IPlayerCallback;
 import com.uniqueAndroid.ximalaya.presenters.PlayerPresenter;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
+import com.uniqueAndroid.ximalaya.views.PopWindow;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
@@ -61,6 +67,12 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         sPlayModeRule.put(XmPlayListControl.PlayMode.PLAY_MODEL_SINGLE_LOOP, XmPlayListControl.PlayMode.PLAY_MODEL_LIST);
     }
 
+    private View mPlayListBtn;
+    private PopWindow mPopWindow;
+    private ValueAnimator mEnterBgAnimator;
+    private ValueAnimator mOutBgAnimator;
+    public final int BG_ANIMATION_DURATION = 300;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +82,30 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mPlayerPresenter.registerViewCallback(this);
         mPlayerPresenter.getPlayList();
         initEvent();
+        initBgAnimation();
+    }
+
+    private void initBgAnimation() {
+        mEnterBgAnimator = ValueAnimator.ofFloat(1.0f, 0.7f);
+        mEnterBgAnimator.setDuration(BG_ANIMATION_DURATION);
+        mEnterBgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                //处理背景，有点透明度
+                updateBgAlpha(value);
+            }
+        });
+        mOutBgAnimator = ValueAnimator.ofFloat(0.7f,1.0f);
+        mOutBgAnimator.setDuration(BG_ANIMATION_DURATION);
+        mOutBgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                //处理背景，有点透明度
+                updateBgAlpha(value);
+            }
+        });
     }
 
     @Override
@@ -191,6 +227,29 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
                 }
             }
         });
+
+
+        mPlayListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+                mEnterBgAnimator.start();
+
+            }
+        });
+        mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                mOutBgAnimator.start();
+            }
+        });
+    }
+
+    public void updateBgAlpha(float alpha) {
+        Window window = getWindow();
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        attributes.alpha = alpha;
+        window.setAttributes(attributes);
     }
 
     /**
@@ -199,7 +258,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
      * PLAY_MODEL_LIST_LOOP
      * PLAY_MODEL_RANDOM
      * PLAY_MODEL_SINGLE_LOOP
-     * @param playMode
+     *
      */
     private void updatePlayModeBtnImg() {
         int resId = R.drawable.mode_list;
@@ -231,6 +290,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mTrackTitleTv = this.findViewById(R.id.track_title);
         mTrackPageView = this.findViewById(R.id.track_pager_view);
         mPlayModeSwitchBtn = this.findViewById(R.id.player_mode_switch);
+        mPlayListBtn = this.findViewById(R.id.play_list);
+        mPopWindow = new PopWindow();
         mTrackPagerAdapter = new PlayerTrackPagerAdapter();
         mTrackPageView.setAdapter(mTrackPagerAdapter);
     }
