@@ -18,14 +18,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.uniqueAndroid.ximalaya.adapters.DetailListAdapter;
-import com.uniqueAndroid.ximalaya.adapters.PlayerTrackPagerAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseActivity;
 import com.uniqueAndroid.ximalaya.interfaces.IAlbumDetailViewCallback;
+import com.uniqueAndroid.ximalaya.interfaces.IPlayerCallback;
 import com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter;
 import com.uniqueAndroid.ximalaya.presenters.PlayerPresenter;
 import com.uniqueAndroid.ximalaya.utils.ImageBlur;
@@ -33,12 +32,13 @@ import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.uniqueAndroid.ximalaya.views.UILoader;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
+import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
 import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, UILoader.OnRetryClickListener, DetailListAdapter.ItemClickListener {
+public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, UILoader.OnRetryClickListener, DetailListAdapter.ItemClickListener, IPlayerCallback {
 
     private static final String TAG = "DetailActivity";
     private ImageView bgCover;
@@ -54,6 +54,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private long mCurrentId = -1;
     private ImageView mPlayControlBtn;
     private TextView mPlayControlTips;
+    private PlayerPresenter mPlayerPresenter;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -65,6 +66,24 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         initView();
         albumDetailPresenter = AlbumDetailPresenter.getInstance();
         albumDetailPresenter.registerViewCallback(this);
+        mPlayerPresenter = PlayerPresenter.getPlayerPresenter();
+        mPlayerPresenter.registerViewCallback(this);
+        initListener();
+    }
+
+    private void initListener() {
+        if (mPlayControlBtn != null) {
+            mPlayControlBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPlayerPresenter.isPlaying()) {
+                        mPlayerPresenter.pause();
+                    } else {
+                        mPlayerPresenter.play();
+                    }
+                }
+            });
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -194,5 +213,80 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         playerPresenter.setPlayList(detailData, position);
         Intent intent = new Intent(this, PlayerActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onPlayStart() {
+        //修改图标，文字修改为正在播放
+        if (mPlayControlBtn != null && mPlayControlTips != null) {
+            mPlayControlBtn.setImageResource(R.drawable.ic_baseline_pause_24);
+            mPlayControlTips.setText(R.string.playing_tips_text);
+        }
+    }
+
+    @Override
+    public void onPlayPause() {
+        if (mPlayControlBtn != null && mPlayControlTips != null) {
+            mPlayControlBtn.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+            mPlayControlTips.setText(R.string.pause_tips_text);
+        }
+    }
+
+    @Override
+    public void onPlayStop() {
+        if (mPlayControlBtn != null && mPlayControlTips != null) {
+            mPlayControlBtn.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+            mPlayControlTips.setText(R.string.pause_tips_text);
+        }
+    }
+
+    @Override
+    public void onPlayError() {
+
+    }
+
+    @Override
+    public void nextPlay(Track track) {
+
+    }
+
+    @Override
+    public void onPrePlay(Track track) {
+
+    }
+
+    @Override
+    public void onListLoaded(List<Track> list) {
+
+    }
+
+    @Override
+    public void onPlayModeChange(XmPlayListControl.PlayMode playMode) {
+
+    }
+
+    @Override
+    public void onProgressChange(long currentProgress, long total) {
+
+    }
+
+    @Override
+    public void onAdLoading() {
+
+    }
+
+    @Override
+    public void onAdFinished() {
+
+    }
+
+    @Override
+    public void onTrackUpdate(Track track, int playIndex) {
+
+    }
+
+    @Override
+    public void updateListOrder(boolean isReverse) {
+
     }
 }

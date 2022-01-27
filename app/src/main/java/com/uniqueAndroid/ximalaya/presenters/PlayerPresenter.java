@@ -196,7 +196,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     }
 
     @Override
-    public boolean isPlay() {
+    public boolean isPlaying() {
         return mPlayerManager.isPlaying();
 
     }

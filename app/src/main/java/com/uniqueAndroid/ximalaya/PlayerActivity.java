@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -126,7 +125,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mControlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPlayerPresenter.isPlay()) {
+                if (mPlayerPresenter.isPlaying()) {
                     mPlayerPresenter.pause();
                 } else {
                     mPlayerPresenter.play();
