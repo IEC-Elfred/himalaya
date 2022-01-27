@@ -102,9 +102,9 @@ public class PopWindow extends PopupWindow {
         mPlayListAdapter.setOnItemClickListener(listener);
     }
 
-    public void updateOrderIcon(boolean isOrder) {
-        mOrderIcon.setImageResource(isOrder ? R.drawable.desc : R.drawable.acc);
-        mOrderText.setText( BaseApplication.getAppContext().getResources().getString(isOrder ? R.string.order_text : R.string.reverse_text));
+    public void updateOrderIcon(boolean isReverse) {
+        mOrderIcon.setImageResource(isReverse ? R.drawable.desc : R.drawable.acc);
+        mOrderText.setText( BaseApplication.getAppContext().getResources().getString(isReverse ? R.string.order_text : R.string.reverse_text));
     }
 
     public void updatePlayMode(XmPlayListControl.PlayMode currentMode) {

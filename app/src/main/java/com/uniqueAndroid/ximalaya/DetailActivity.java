@@ -68,8 +68,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         albumDetailPresenter.registerViewCallback(this);
         mPlayerPresenter = PlayerPresenter.getPlayerPresenter();
         mPlayerPresenter.registerViewCallback(this);
+        updatePlayState(mPlayerPresenter.isPlaying());
         initListener();
     }
+
+
 
     private void initListener() {
         if (mPlayControlBtn != null) {
@@ -215,29 +218,26 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         startActivity(intent);
     }
 
+    private void updatePlayState(boolean playing) {
+        if (mPlayControlBtn != null && mPlayControlTips != null) {
+            mPlayControlBtn.setImageResource(playing ? R.drawable.ic_baseline_pause_24 : R.drawable.ic_baseline_play_circle_outline_24);
+            mPlayControlTips.setText(playing ? R.string.playing_tips_text : R.string.pause_tips_text);
+        }
+    }
+
     @Override
     public void onPlayStart() {
-        //修改图标，文字修改为正在播放
-        if (mPlayControlBtn != null && mPlayControlTips != null) {
-            mPlayControlBtn.setImageResource(R.drawable.ic_baseline_pause_24);
-            mPlayControlTips.setText(R.string.playing_tips_text);
-        }
+        updatePlayState(true);
     }
 
     @Override
     public void onPlayPause() {
-        if (mPlayControlBtn != null && mPlayControlTips != null) {
-            mPlayControlBtn.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
-            mPlayControlTips.setText(R.string.pause_tips_text);
-        }
+        updatePlayState(false);
     }
 
     @Override
     public void onPlayStop() {
-        if (mPlayControlBtn != null && mPlayControlTips != null) {
-            mPlayControlBtn.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
-            mPlayControlTips.setText(R.string.pause_tips_text);
-        }
+        updatePlayState(false);
     }
 
     @Override

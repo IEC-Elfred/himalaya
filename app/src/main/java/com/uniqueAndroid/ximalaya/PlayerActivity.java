@@ -430,6 +430,6 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 
     @Override
     public void updateListOrder(boolean isReverse) {
-        mPopWindow.updateOrderIcon(!isReverse);
+        mPopWindow.updateOrderIcon(isReverse);
     }
 }
