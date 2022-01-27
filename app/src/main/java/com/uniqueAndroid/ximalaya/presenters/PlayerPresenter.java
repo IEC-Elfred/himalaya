@@ -3,7 +3,6 @@ package com.uniqueAndroid.ximalaya.presenters;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.uniqueAndroid.ximalaya.R;
 import com.uniqueAndroid.ximalaya.base.BaseApplication;
 import com.uniqueAndroid.ximalaya.interfaces.IPlayerCallback;
 import com.uniqueAndroid.ximalaya.interfaces.IPlayerPresenter;
@@ -78,7 +77,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void registerViewCallback(IPlayerCallback iPlayerCallback) {
-        iPlayerCallback.onTrackTitleUpdate(mTrack, mCurrentIndex);
+        iPlayerCallback.onTrackUpdate(mTrack, mCurrentIndex);
         int anInt = mPlayModeSp.getInt(PLAY_MODE_SP_KEY,PLAY_MODE_LIST_INT);
         mCurrentPlayMode = getModeByPlayInt(anInt);
         iPlayerCallback.onPlayModeChange(getModeByPlayInt(anInt));
@@ -182,6 +181,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     @Override
     public void playByIndex(int index) {
         if (mPlayerManager != null) {
+            mCurrentIndex = index;
             mPlayerManager.play(index);
         }
     }
@@ -287,7 +287,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         if (curModel instanceof Track) {
             mTrack = (Track) curModel;
             for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
-                iPlayerCallback.onTrackTitleUpdate(mTrack, mCurrentIndex);
+                iPlayerCallback.onTrackUpdate(mTrack, mCurrentIndex);
             }
         }
 

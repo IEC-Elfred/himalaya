@@ -384,7 +384,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     }
 
     @Override
-    public void onTrackTitleUpdate(Track track, int playIndex) {
+    public void onTrackUpdate(Track track, int playIndex) {
         if (mTrackTitleTv != null) {
             mTrackTitleTv.setText(track.getTrackTitle());
         }
@@ -392,5 +392,11 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         if (mTrackPageView != null) {
             mTrackPageView.setCurrentItem(playIndex, true);
         }
+        //更新播放列表里的数据
+        if (mPopWindow != null) {
+            LogUtil.d(TAG,"playIndex ---> " + playIndex);
+            mPopWindow.setCurrentPlayPosition(playIndex);
+        }
+
     }
 }

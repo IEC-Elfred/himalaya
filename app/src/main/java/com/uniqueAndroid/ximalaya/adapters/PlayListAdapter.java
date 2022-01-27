@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.uniqueAndroid.ximalaya.R;
 import com.uniqueAndroid.ximalaya.base.BaseApplication;
+import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
 import java.util.ArrayList;
@@ -18,8 +19,11 @@ import java.util.List;
 
 public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.InnerHolder> {
 
+    private static final String TAG = "PlayListAdapter";
     private List<Track> mData = new ArrayList<>();
     private int mPlayingIndex = 0;
+    private ImageView mPlayStatusView;
+    private TextView mTrackTitle;
 
     @NonNull
     @Override
@@ -30,12 +34,14 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.InnerH
 
     @Override
     public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
+        LogUtil.d(TAG,"position ---> " + position);
+        LogUtil.d(TAG,"now mPlayingIndex ----> " + position);
         Track track = mData.get(position);
-        TextView trackTitle = holder.itemView.findViewById(R.id.track_title);
-        trackTitle.setText(track.getTrackTitle());
-        trackTitle.setTextColor(BaseApplication.getAppContext().getResources().getColor(mPlayingIndex == position ? R.color.main_color : R.color.play_list_text_color ));
-        ImageView playStatusView = holder.itemView.findViewById(R.id.track_status);
-        playStatusView.setVisibility(mPlayingIndex == position ? View.VISIBLE : View.GONE);
+        mTrackTitle = holder.itemView.findViewById(R.id.track_title);
+        mTrackTitle.setText(track.getTrackTitle());
+        mTrackTitle.setTextColor(BaseApplication.getAppContext().getResources().getColor(position == mPlayingIndex ? R.color.main_color : R.color.play_list_text_color ));
+        mPlayStatusView = holder.itemView.findViewById(R.id.track_status);
+        mPlayStatusView.setVisibility(position == mPlayingIndex ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -46,6 +52,12 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.InnerH
     public void setData(List<Track> list) {
         mData.clear();
         mData.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void setCurrentPlayPosition(int position) {
+        LogUtil.d(TAG,"now Position ----> " + position);
+        mPlayingIndex = position;
         notifyDataSetChanged();
     }
 
