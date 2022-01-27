@@ -41,20 +41,21 @@
 
         <ImageView
             android:id="@+id/play_icon"
-            android:layout_width="19dp"
-            android:layout_height="19dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:src="@drawable/ic_baseline_play_circle_outline_24" />
 
         <TextView
+            android:id="@+id/play_control_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@id/play_icon"
             android:text="继续播放"
-            android:textSize="12sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"

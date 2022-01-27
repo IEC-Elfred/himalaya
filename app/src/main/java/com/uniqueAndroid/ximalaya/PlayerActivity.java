@@ -3,7 +3,6 @@ package com.uniqueAndroid.ximalaya;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Trace;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -96,7 +96,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
                 updateBgAlpha(value);
             }
         });
-        mOutBgAnimator = ValueAnimator.ofFloat(0.7f,1.0f);
+        mOutBgAnimator = ValueAnimator.ofFloat(0.7f, 1.0f);
         mOutBgAnimator.setDuration(BG_ANIMATION_DURATION);
         mOutBgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -221,10 +221,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mPlayModeSwitchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                XmPlayListControl.PlayMode playMode = sPlayModeRule.get(mCurrentMode);
-                if (mPlayerPresenter != null) {
-                    mPlayerPresenter.switchPlayMode(playMode);
-                }
+                switchMode();
             }
         });
 
@@ -243,6 +240,38 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
                 mOutBgAnimator.start();
             }
         });
+        mPopWindow.setPlayListItemClickListener(new PopWindow.PlayListItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if (mPlayerPresenter != null) {
+                    mPlayerPresenter.playByIndex(position);
+                }
+            }
+
+        });
+
+
+        mPopWindow.setPlayListPlayModeClickListener(new PopWindow.PlayListActionClickListener() {
+            @Override
+            public void onPlayModeClick() {
+                switchMode();
+            }
+
+            @Override
+            public void onOrderClick() {
+                if (mPlayerPresenter != null) {
+                    mPlayerPresenter.reversePlayList();
+                }
+            }
+        });
+    }
+
+
+    private void switchMode() {
+        XmPlayListControl.PlayMode playMode = sPlayModeRule.get(mCurrentMode);
+        if (mPlayerPresenter != null) {
+            mPlayerPresenter.switchPlayMode(playMode);
+        }
     }
 
     public void updateBgAlpha(float alpha) {
@@ -258,7 +287,6 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
      * PLAY_MODEL_LIST_LOOP
      * PLAY_MODEL_RANDOM
      * PLAY_MODEL_SINGLE_LOOP
-     *
      */
     private void updatePlayModeBtnImg() {
         int resId = R.drawable.mode_list;
@@ -347,6 +375,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     public void onPlayModeChange(XmPlayListControl.PlayMode playMode) {
         //更新播放模式并且修改ui
         mCurrentMode = playMode;
+        mPopWindow.updatePlayMode(mCurrentMode);
         updatePlayModeBtnImg();
     }
 
@@ -394,9 +423,14 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         }
         //更新播放列表里的数据
         if (mPopWindow != null) {
-            LogUtil.d(TAG,"playIndex ---> " + playIndex);
+            LogUtil.d(TAG, "playIndex ---> " + playIndex);
             mPopWindow.setCurrentPlayPosition(playIndex);
         }
 
+    }
+
+    @Override
+    public void updateListOrder(boolean isReverse) {
+        mPopWindow.updateOrderIcon(!isReverse);
     }
 }

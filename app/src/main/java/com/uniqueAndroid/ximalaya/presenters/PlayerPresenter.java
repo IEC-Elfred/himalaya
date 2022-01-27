@@ -19,6 +19,8 @@ import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayerException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, IXmPlayerStatusListener {
@@ -29,6 +31,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     private Track mTrack;
     private List<Track> mPlayList;
     private int mCurrentIndex = 0;
+    private boolean mIsReverse = false;
     private final SharedPreferences mPlayModeSp;
     private XmPlayListControl.PlayMode mCurrentPlayMode = XmPlayListControl.PlayMode.PLAY_MODEL_LIST;
 
@@ -39,6 +42,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     //sp's name and key
     public static final String PLAY_MODE_SP_NAME = "PlayMode";
     public static final String PLAY_MODE_SP_KEY = "mCurrentPlayMode";
+    private Track mCurrentTrack;
 
     private PlayerPresenter() {
         mPlayerManager = XmPlayerManager.getInstance(BaseApplication.getAppContext());
@@ -78,7 +82,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     @Override
     public void registerViewCallback(IPlayerCallback iPlayerCallback) {
         iPlayerCallback.onTrackUpdate(mTrack, mCurrentIndex);
-        int anInt = mPlayModeSp.getInt(PLAY_MODE_SP_KEY,PLAY_MODE_LIST_INT);
+        int anInt = mPlayModeSp.getInt(PLAY_MODE_SP_KEY, PLAY_MODE_LIST_INT);
         mCurrentPlayMode = getModeByPlayInt(anInt);
         iPlayerCallback.onPlayModeChange(getModeByPlayInt(anInt));
         if (!mIPlayerCallbacks.contains(iPlayerCallback)) {
@@ -135,7 +139,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
                 iPlayerCallback.onPlayModeChange(mode);
             }
             SharedPreferences.Editor edit = mPlayModeSp.edit();
-            edit.putInt(PLAY_MODE_SP_KEY,getIntByPlayMode(mode));
+            edit.putInt(PLAY_MODE_SP_KEY, getIntByPlayMode(mode));
             edit.commit();
         }
     }
@@ -159,7 +163,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
             case PLAY_MODE_LIST_INT:
                 return XmPlayListControl.PlayMode.PLAY_MODEL_LIST;
             case PLAY_MODE_RANDOM_INT:
-                return  XmPlayListControl.PlayMode.PLAY_MODEL_RANDOM;
+                return XmPlayListControl.PlayMode.PLAY_MODEL_RANDOM;
             case PLAY_MODE_LIST_LOOP_INT:
                 return XmPlayListControl.PlayMode.PLAY_MODEL_LIST_LOOP;
             case PLAY_MODE_SINGLE_LOOP_INT:
@@ -195,6 +199,22 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     public boolean isPlay() {
         return mPlayerManager.isPlaying();
 
+    }
+
+    @Override
+    public void reversePlayList() {
+        List<Track> playList = mPlayerManager.getPlayList();
+        Collections.reverse(playList);
+        mIsReverse = !mIsReverse;
+        mCurrentIndex = playList.size() - 1 - mCurrentIndex;
+        mPlayerManager.setPlayList(playList, mCurrentIndex);
+        //更新ui
+        mCurrentTrack = (Track) mPlayerManager.getCurrSound();
+        for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
+            iPlayerCallback.onListLoaded(playList);
+            iPlayerCallback.onTrackUpdate(mCurrentTrack, mCurrentIndex);
+            iPlayerCallback.updateListOrder(mIsReverse);
+        }
     }
 
 
@@ -303,7 +323,6 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     public void onBufferingStop() {
         LogUtil.d(TAG, "onBufferingStop");
     }
-
 
     @Override
     public void onBufferProgress(int i) {

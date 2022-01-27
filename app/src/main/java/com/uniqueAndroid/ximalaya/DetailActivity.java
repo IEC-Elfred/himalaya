@@ -52,6 +52,8 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private FrameLayout mDetailListContainer;
     private UILoader mUiLoader;
     private long mCurrentId = -1;
+    private ImageView mPlayControlBtn;
+    private TextView mPlayControlTips;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -84,6 +86,8 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         smallCover = this.findViewById(R.id.iv_small_cover);
         albumTitle = this.findViewById(R.id.tv_album_title);
         albumAuthor = this.findViewById(R.id.tv_album_author);
+        mPlayControlBtn = this.findViewById(R.id.play_icon);
+        mPlayControlTips = this.findViewById(R.id.play_control_tv);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.uniqueAndroid.ximalaya.R;
 import com.uniqueAndroid.ximalaya.base.BaseApplication;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
+import com.uniqueAndroid.ximalaya.views.PopWindow;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.InnerH
     private int mPlayingIndex = 0;
     private ImageView mPlayStatusView;
     private TextView mTrackTitle;
+    private PopWindow.PlayListItemClickListener mPlayListItemClickListener = null;
 
     @NonNull
     @Override
@@ -42,6 +44,14 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.InnerH
         mTrackTitle.setTextColor(BaseApplication.getAppContext().getResources().getColor(position == mPlayingIndex ? R.color.main_color : R.color.play_list_text_color ));
         mPlayStatusView = holder.itemView.findViewById(R.id.track_status);
         mPlayStatusView.setVisibility(position == mPlayingIndex ? View.VISIBLE : View.GONE);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPlayListItemClickListener != null) {
+                    mPlayListItemClickListener.onItemClick(position);
+                }
+            }
+        });
     }
 
     @Override
@@ -59,6 +69,10 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.InnerH
         LogUtil.d(TAG,"now Position ----> " + position);
         mPlayingIndex = position;
         notifyDataSetChanged();
+    }
+
+    public void setOnItemClickListener(PopWindow.PlayListItemClickListener listener) {
+        mPlayListItemClickListener = listener;
     }
 
     public class InnerHolder extends RecyclerView.ViewHolder {
