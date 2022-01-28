@@ -33,18 +33,19 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
         android:id="@+id/play_control_container"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
         android:layout_below="@id/subscription_container"
         android:background="#EBE8E8">
 
         <ImageView
             android:id="@+id/play_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:src="@drawable/ic_baseline_play_circle_outline_24" />
 
         <TextView

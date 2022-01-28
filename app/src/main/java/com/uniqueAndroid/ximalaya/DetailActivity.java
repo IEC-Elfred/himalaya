@@ -136,6 +136,8 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         mPlayControlTips = this.findViewById(R.id.play_control_tv);
     }
 
+    private boolean mIsLoaderMore = false;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     private View createSuccessView(ViewGroup container) {
         View detailList = LayoutInflater.from(this).inflate(R.layout.item_detail_list, container, false);
@@ -160,13 +162,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                BaseApplication.getsHandler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(DetailActivity.this,"上拉加载更多...",Toast.LENGTH_SHORT).show();
-                        mRefreshLayout.finishLoadmore();
-                    }
-                },2000);
+                // TODO: 2022/1/28 加载更多的内容
+                if (albumDetailPresenter != null) {
+                    albumDetailPresenter.loadMore();
+                    mIsLoaderMore = true;
+                }
             }
 
             @Override
@@ -187,6 +187,10 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDetailListLoaded(List<Track> tracks) {
+        if (mIsLoaderMore && mRefreshLayout !=null) {
+            mRefreshLayout.finishLoadmore();
+            mIsLoaderMore = false;
+        }
         this.mCurrentTracks = tracks;
         if (tracks == null || tracks.size() == 0) {
             if (mUiLoader != null) {
