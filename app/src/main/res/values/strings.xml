@@ -17,5 +17,6 @@
     
     <string name="playing_tips_text">正在播放</string>
     <string name="pause_tips_text">已暂停</string>
+    <string name="click_play_text">点击播放</string>
 
 </resources>

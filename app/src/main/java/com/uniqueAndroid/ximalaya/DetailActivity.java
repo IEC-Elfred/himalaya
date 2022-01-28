@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private List<Track> mCurrentTracks = null;
     private final static int DEFAULT_PLAY_INDEX = 0;
     private TwinklingRefreshLayout mRefreshLayout;
+    private String mCurrentTrackTitle = "";
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -78,7 +80,6 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         updatePlayState(mPlayerPresenter.isPlaying());
         initListener();
     }
-
 
 
     private void initListener() {
@@ -98,11 +99,12 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             });
         }
     }
+
     /**
      * 当播放器里面没有播放内容，我们要进行处理一下
      */
     private void handleNoPlayList() {
-        mPlayerPresenter.setPlayList(mCurrentTracks,DEFAULT_PLAY_INDEX);
+        mPlayerPresenter.setPlayList(mCurrentTracks, DEFAULT_PLAY_INDEX);
     }
 
     private void handlePlayControl() {
@@ -134,6 +136,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         albumAuthor = this.findViewById(R.id.tv_album_author);
         mPlayControlBtn = this.findViewById(R.id.play_icon);
         mPlayControlTips = this.findViewById(R.id.play_control_tv);
+        mPlayControlTips.setSelected(true);
     }
 
     private boolean mIsLoaderMore = false;
@@ -175,10 +178,10 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
                 BaseApplication.getsHandler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(DetailActivity.this,"刷新成功...",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailActivity.this, "刷新成功...", Toast.LENGTH_SHORT).show();
                         mRefreshLayout.finishRefreshing();
                     }
-                },2000);
+                }, 2000);
             }
         });
         return detailList;
@@ -187,7 +190,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDetailListLoaded(List<Track> tracks) {
-        if (mIsLoaderMore && mRefreshLayout !=null) {
+        if (mIsLoaderMore && mRefreshLayout != null) {
             mRefreshLayout.finishLoadmore();
             mIsLoaderMore = false;
         }
@@ -278,7 +281,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private void updatePlayState(boolean playing) {
         if (mPlayControlBtn != null && mPlayControlTips != null) {
             mPlayControlBtn.setImageResource(playing ? R.drawable.ic_baseline_pause_24 : R.drawable.ic_baseline_play_circle_outline_24);
-            mPlayControlTips.setText(playing ? R.string.playing_tips_text : R.string.pause_tips_text);
+            if (!playing) {
+                mPlayControlTips.setText(R.string.click_play_text);
+            } else {
+                mPlayControlTips.setText(mCurrentTrackTitle);
+            }
         }
     }
 
@@ -339,7 +346,12 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 
     @Override
     public void onTrackUpdate(Track track, int playIndex) {
-
+        if (track != null) {
+            mCurrentTrackTitle = track.getTrackTitle();
+            if (!TextUtils.isEmpty(mCurrentTrackTitle) && mPlayControlTips != null){
+                mPlayControlTips.setText(mCurrentTrackTitle);
+            }
+        }
     }
 
     @Override
