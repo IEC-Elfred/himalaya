@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -165,7 +166,6 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                // TODO: 2022/1/28 加载更多的内容
                 if (albumDetailPresenter != null) {
                     albumDetailPresenter.loadMore();
                     mIsLoaderMore = true;
@@ -259,6 +259,20 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     @Override
     public void onNetworkError(int errorCode, String errorMsg) {
         mUiLoader.updateStatus(UILoader.UIStatus.NETWORK_ERROR);
+    }
+
+    @Override
+    public void onLoaderMoreFinished(int size) {
+        if (size > 0) {
+            Toast.makeText(this,"成功加载" + size + "条节目",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this,"没有更多节目", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRefreshFinished(int size) {
+
     }
 
     @Override
