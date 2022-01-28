@@ -66,7 +66,6 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
     private View createSuccessView(LayoutInflater layoutInflater, ViewGroup container) {
         rootView = layoutInflater.inflate(R.layout.fragment_recommend, container, false);
         recommendRv = rootView.findViewById(R.id.recommend_list);
-        Context context;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recommendRv.setLayoutManager(linearLayoutManager);

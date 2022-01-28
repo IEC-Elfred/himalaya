@@ -57,4 +57,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.github.hackware1993:MagicIndicator:1.6.0' // for support lib
     implementation 'com.github.hackware1993:MagicIndicator:1.7.0' // for androidx
+    implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
 }

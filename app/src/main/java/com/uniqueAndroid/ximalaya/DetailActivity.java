@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,10 +20,14 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.header.bezierlayout.BezierLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.uniqueAndroid.ximalaya.adapters.DetailListAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseActivity;
+import com.uniqueAndroid.ximalaya.base.BaseApplication;
 import com.uniqueAndroid.ximalaya.interfaces.IAlbumDetailViewCallback;
 import com.uniqueAndroid.ximalaya.interfaces.IPlayerCallback;
 import com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter;
@@ -56,6 +61,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private PlayerPresenter mPlayerPresenter;
     private List<Track> mCurrentTracks = null;
     private final static int DEFAULT_PLAY_INDEX = 0;
+    private TwinklingRefreshLayout mRefreshLayout;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -134,6 +140,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private View createSuccessView(ViewGroup container) {
         View detailList = LayoutInflater.from(this).inflate(R.layout.item_detail_list, container, false);
         albumDetailList = detailList.findViewById(R.id.album_detail_list);
+        mRefreshLayout = detailList.findViewById(R.id.refresh_layout);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         albumDetailList.setLayoutManager(layoutManager);
         albumDetailList.setAdapter(mDetailListAdapter);
@@ -147,6 +154,33 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             }
         });
         mDetailListAdapter.setItemClickListener(this);
+        mRefreshLayout.setHeaderView(new BezierLayout(this));
+        mRefreshLayout.setMaxHeadHeight(140);
+        mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
+            @Override
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                super.onLoadMore(refreshLayout);
+                BaseApplication.getsHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(DetailActivity.this,"上拉加载更多...",Toast.LENGTH_SHORT).show();
+                        mRefreshLayout.finishLoadmore();
+                    }
+                },2000);
+            }
+
+            @Override
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                super.onRefresh(refreshLayout);
+                BaseApplication.getsHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(DetailActivity.this,"刷新成功...",Toast.LENGTH_SHORT).show();
+                        mRefreshLayout.finishRefreshing();
+                    }
+                },2000);
+            }
+        });
         return detailList;
     }
 

@@ -1,6 +1,5 @@
 package com.uniqueAndroid.ximalaya.presenters;
 
-import android.support.annotation.Nullable;
 
 import com.uniqueAndroid.ximalaya.interfaces.IAlbumDetailPresenter;
 import com.uniqueAndroid.ximalaya.interfaces.IAlbumDetailViewCallback;
@@ -62,7 +61,7 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
         map.put(DTransferConstants.PAGE_SIZE, Constants.COUNT_DEFAULT + "");
         CommonRequest.getTracks(map, new IDataCallBack<TrackList>() {
             @Override
-            public void onSuccess(@Nullable @androidx.annotation.Nullable TrackList trackList) {
+            public void onSuccess( @androidx.annotation.Nullable TrackList trackList) {
                 if (trackList != null) {
                     List<Track> tracks = trackList.getTracks();
                     LogUtil.d(TAG, "tracks size--->" + tracks.size());
