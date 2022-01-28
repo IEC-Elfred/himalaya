@@ -343,6 +343,10 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         return false;
     }
 
+    public boolean hasPlayList() {
+       return isPlayerListSet;
+    }
+
     //=========播放器相关end=======
 
 

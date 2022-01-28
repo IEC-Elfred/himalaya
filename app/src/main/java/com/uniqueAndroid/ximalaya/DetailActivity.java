@@ -39,7 +39,6 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 import java.util.List;
 
 public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, UILoader.OnRetryClickListener, DetailListAdapter.ItemClickListener, IPlayerCallback {
-
     private static final String TAG = "DetailActivity";
     private ImageView bgCover;
     private ImageView smallCover;
@@ -55,6 +54,8 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private ImageView mPlayControlBtn;
     private TextView mPlayControlTips;
     private PlayerPresenter mPlayerPresenter;
+    private List<Track> mCurrentTracks = null;
+    private final static int DEFAULT_PLAY_INDEX = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -79,13 +80,30 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             mPlayControlBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mPlayerPresenter.isPlaying()) {
-                        mPlayerPresenter.pause();
-                    } else {
-                        mPlayerPresenter.play();
+                    if (mPlayerPresenter != null) {
+                        //判断播放器是否有播放列表
+                        if (mPlayerPresenter.hasPlayList()) {
+                            handlePlayControl();
+                        } else {
+                            handleNoPlayList();
+                        }
                     }
                 }
             });
+        }
+    }
+    /**
+     * 当播放器里面没有播放内容，我们要进行处理一下
+     */
+    private void handleNoPlayList() {
+        mPlayerPresenter.setPlayList(mCurrentTracks,DEFAULT_PLAY_INDEX);
+    }
+
+    private void handlePlayControl() {
+        if (mPlayerPresenter.isPlaying()) {
+            mPlayerPresenter.pause();
+        } else {
+            mPlayerPresenter.play();
         }
     }
 
@@ -135,6 +153,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDetailListLoaded(List<Track> tracks) {
+        this.mCurrentTracks = tracks;
         if (tracks == null || tracks.size() == 0) {
             if (mUiLoader != null) {
                 mUiLoader.updateStatus(UILoader.UIStatus.EMPTY);
