@@ -40,6 +40,7 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
     private ImageView mPlayControl;
     private PlayerPresenter mPlayerPresenter;
     private View mPlayControlContainer;
+    private View mSearchBtn;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -96,6 +97,14 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
                 startActivity(new Intent(MainActivity.this, PlayerActivity.class));
             }
         });
+
+        mSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,SearchActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -135,6 +144,7 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
         mSubTitle = this.findViewById(R.id.main_sub_title);
         mPlayControl = this.findViewById(R.id.main_play_control);
         mPlayControlContainer = this.findViewById(R.id.main_play_control_container);
+        mSearchBtn = this.findViewById(R.id.search_btn);
     }
 
     @Override

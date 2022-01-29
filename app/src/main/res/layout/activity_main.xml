@@ -20,13 +20,14 @@
             android:layout_weight="3" />
 
         <RelativeLayout
+            android:id="@+id/search_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/ic_baseline_search_24" />
         </RelativeLayout>
