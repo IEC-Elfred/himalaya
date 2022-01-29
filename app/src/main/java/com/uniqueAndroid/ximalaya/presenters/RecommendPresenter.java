@@ -2,6 +2,7 @@ package com.uniqueAndroid.ximalaya.presenters;
 
 import static android.content.ContentValues.TAG;
 
+import com.uniqueAndroid.ximalaya.api.XimalayaApi;
 import com.uniqueAndroid.ximalaya.interfaces.IRecommendPresenter;
 import com.uniqueAndroid.ximalaya.interfaces.IRecommendViewCallback;
 import com.uniqueAndroid.ximalaya.utils.Constants;
@@ -22,6 +23,7 @@ public class RecommendPresenter implements IRecommendPresenter {
     private static final String TAG = "RecommendPresenter";
 
     private List<IRecommendViewCallback> callbacks = new ArrayList<>();
+    private List<Album> mCurrentRecommend = null;
 
     private RecommendPresenter() {
 
@@ -43,9 +45,8 @@ public class RecommendPresenter implements IRecommendPresenter {
     @Override
     public void getRecommendList() {
         updateLoading();
-        Map<String, String> map = new HashMap<String, String>();
-        map.put(DTransferConstants.LIKE_COUNT, Constants.COUNT_RECOMMEND + "");
-        CommonRequest.getGuessLikeAlbum(map, new IDataCallBack<GussLikeAlbumList>() {
+        XimalayaApi ximalayaApi = XimalayaApi.getXimalayaApi();
+        ximalayaApi.getRecommendList(new IDataCallBack<GussLikeAlbumList>() {
             @Override
             public void onSuccess(GussLikeAlbumList gussLikeAlbumList) {
                 if (gussLikeAlbumList != null) {
@@ -55,7 +56,6 @@ public class RecommendPresenter implements IRecommendPresenter {
                     handlerRecommendResult(albumList);
                 }
             }
-
 
             @Override
             public void onError(int i, String s) {
@@ -85,8 +85,18 @@ public class RecommendPresenter implements IRecommendPresenter {
                 for (IRecommendViewCallback callback : callbacks) {
                     callback.onRecommendListLoaded(albumList);
                 }
+                this.mCurrentRecommend = albumList;
             }
         }
+    }
+
+    /**
+     * 获取当前的推荐专辑列表
+     *
+     * @return 推荐专辑列表，使用之前要判空
+     */
+    public List<Album> getCurrentRecommend() {
+        return mCurrentRecommend;
     }
 
     private void updateLoading() {

@@ -1,6 +1,7 @@
 package com.uniqueAndroid.ximalaya.presenters;
 
 
+import com.uniqueAndroid.ximalaya.api.XimalayaApi;
 import com.uniqueAndroid.ximalaya.interfaces.IAlbumDetailPresenter;
 import com.uniqueAndroid.ximalaya.interfaces.IAlbumDetailViewCallback;
 import com.uniqueAndroid.ximalaya.utils.Constants;
@@ -57,46 +58,24 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
     }
 
     private void doLoad(boolean isLoaderMore) {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put(DTransferConstants.SORT, "asc");
-        map.put(DTransferConstants.ALBUM_ID, mCurrentAlbumId + "");
-        map.put(DTransferConstants.PAGE, mCurrentPageIndex + "");
-        map.put(DTransferConstants.PAGE_SIZE, Constants.COUNT_DEFAULT + "");
-        CommonRequest.getTracks(map, new IDataCallBack<TrackList>() {
+        XimalayaApi ximalayaApi = XimalayaApi.getXimalayaApi();
+        ximalayaApi.getAlbumDetail(new IDataCallBack<TrackList>() {
             @Override
             public void onSuccess(TrackList trackList) {
-                if (trackList != null) {
-                    List<Track> tracks = trackList.getTracks();
-                    LogUtil.d(TAG, "tracks size--->" + tracks.size());
-                    if (isLoaderMore) {
-                        //上拉加载，结果放到尾部
-                        mTracks.addAll(mTracks.size() - 1, tracks);
-                        int size = tracks.size();
-                        handlerLoaderMoreResult(size);
-                    } else {
-                        //下拉加载，结果放到前面
-                        mTracks.addAll(0, tracks);
-                    }
-                    handlerAlbumDetailResult(mTracks);
-                }
+
             }
 
             @Override
             public void onError(int i, String s) {
-                if (isLoaderMore) {
-                    mCurrentPageIndex--;
-                }
-                LogUtil.d(TAG, "ErrorCode---->" + i);
-                LogUtil.d(TAG, "ErrorMsg---->" + s);
-                handlerError(i, s);
+
             }
-        });
+        },mCurrentAlbumId,mCurrentPageIndex);
 
     }
 
     /**
      * 处理加载更多的结果
-     * @param size
+     * @param size >0意味着加载成功
      */
     private void handlerLoaderMoreResult(int size) {
         for (IAlbumDetailViewCallback callback : mCallbacks) {

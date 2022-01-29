@@ -413,6 +413,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 
     @Override
     public void onTrackUpdate(Track track, int playIndex) {
+        if (track == null) {
+            LogUtil.d(TAG,"onTrackUpdate---> track == null" );
+            return;
+        }
         if (mTrackTitleTv != null) {
             mTrackTitleTv.setText(track.getTrackTitle());
         }
