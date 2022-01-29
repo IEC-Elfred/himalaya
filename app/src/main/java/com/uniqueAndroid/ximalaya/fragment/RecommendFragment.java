@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.uniqueAndroid.ximalaya.DetailActivity;
 import com.uniqueAndroid.ximalaya.R;
 import com.uniqueAndroid.ximalaya.adapters.RecommendListAdapter;
@@ -66,6 +67,8 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
     private View createSuccessView(LayoutInflater layoutInflater, ViewGroup container) {
         rootView = layoutInflater.inflate(R.layout.fragment_recommend, container, false);
         recommendRv = rootView.findViewById(R.id.recommend_list);
+        TwinklingRefreshLayout twinklingRefreshLayout = rootView.findViewById(R.id.over_scorll_view);
+        twinklingRefreshLayout.setPureScrollModeOn();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recommendRv.setLayoutManager(linearLayoutManager);
