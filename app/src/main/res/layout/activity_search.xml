@@ -16,8 +16,12 @@
             android:src="@drawable/ic_baseline_navigate_before_24"
             android:layout_height="40dp"/>
         <EditText
+            android:textCursorDrawable="@drawable/shape_edit_text_cursor"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:hint="请输入专辑关键字"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:background="@drawable/shape_edit_text_bg"
             android:layout_height="34dp"/>
         <TextView
