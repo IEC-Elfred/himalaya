@@ -18,11 +18,14 @@
         <entry key="app/src/main/res/drawable/selector_flow_text.xml" value="0.16203703703703703" />
         <entry key="app/src/main/res/drawable/selector_player_next.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/drawable/selector_player_previous.xml" value="0.19270833333333334" />
+        <entry key="app/src/main/res/drawable/selector_search_recommend_bg.xml" value="0.16203703703703703" />
         <entry key="app/src/main/res/drawable/shape_album_item_bg.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/shape_edit_text_bg.xml" value="0.16203703703703703" />
         <entry key="app/src/main/res/drawable/shape_edit_text_cursor.xml" value="0.16203703703703703" />
         <entry key="app/src/main/res/drawable/shape_play_list_bg.xml" value="0.16354166666666667" />
         <entry key="app/src/main/res/drawable/shape_subscription_bg.xml" value="0.17037037037037037" />
+        <entry key="app/src/main/res/drawable/shapr_recommend_item_bg_normal.xml" value="0.16203703703703703" />
+        <entry key="app/src/main/res/drawable/shapr_recommend_item_bg_press.xml" value="0.16203703703703703" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24282982791587" />
         <entry key="app/src/main/res/layout/activity_player.xml" value="0.375" />

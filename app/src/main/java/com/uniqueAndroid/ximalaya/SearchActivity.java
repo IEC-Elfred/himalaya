@@ -150,6 +150,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
                 mInputBox.setText("");
             }
         });
+
+        if (mSearchRecommendAdapter != null) {
+            mSearchRecommendAdapter.setItemClickListener(new SearchRecommendAdapter.ItemClickListener() {
+                @Override
+                public void onItemClick(String keyword) {
+
+                }
+            });
+        }
     }
 
     /**
@@ -219,6 +228,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
         Context context;
         LinearLayoutManager recommendLayoutManager = new LinearLayoutManager(this);
         mSearchRecommendList.setLayoutManager(recommendLayoutManager);
+        mSearchRecommendList.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                outRect.top = UIUtil.dip2px(view.getContext(), 2);
+                outRect.bottom = UIUtil.dip2px(view.getContext(), 2);
+                outRect.left = UIUtil.dip2px(view.getContext(), 5);
+                outRect.right = UIUtil.dip2px(view.getContext(), 5);
+            }
+        });
         mSearchRecommendAdapter = new SearchRecommendAdapter();
         mSearchRecommendList.setAdapter(mSearchRecommendAdapter);
         return resultView;
