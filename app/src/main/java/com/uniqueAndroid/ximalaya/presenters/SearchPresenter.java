@@ -69,15 +69,22 @@ public class SearchPresenter implements ISearchPresenter {
                 List<Album> albums = searchAlbumList.getAlbums();
                 if (albums!= null) {
                     LogUtil.d(TAG,"albums size --->" + albums.size());
+                    for (ISearchCallback iSearchCallback : mCallbacks) {
+                        iSearchCallback.onSearchResultLoad(albums);
+                    }
                 } else {
                     LogUtil.d(TAG,"albums is null ..");
                 }
+
             }
 
             @Override
             public void onError(int i, String s) {
                 LogUtil.d(TAG,"error code --->" + i);
                 LogUtil.d(TAG,"errorMsg --->" + s);
+                for (ISearchCallback callback : mCallbacks) {
+                    callback.onError(i,s);
+                }
             }
         });
     }
@@ -100,6 +107,9 @@ public class SearchPresenter implements ISearchPresenter {
                 if (hotWordList != null) {
                     List<HotWord> hotWords = hotWordList.getHotWordList();
                     LogUtil.d(TAG,"hotWords size ---> " + hotWords.size());
+                    for (ISearchCallback iSearchCallback : mCallbacks) {
+                        iSearchCallback.onHotWordLoad(hotWords);
+                    }
                 }
             }
 
@@ -107,6 +117,7 @@ public class SearchPresenter implements ISearchPresenter {
             public void onError(int i, String s) {
                 LogUtil.d(TAG,"getHotWord errorCode --->" + i);
                 LogUtil.d(TAG,"getHotWord errorMsg ---> " + s);
+
             }
         });
     }

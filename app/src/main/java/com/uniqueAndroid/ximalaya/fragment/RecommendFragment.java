@@ -1,6 +1,5 @@
 package com.uniqueAndroid.ximalaya.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.uniqueAndroid.ximalaya.DetailActivity;
 import com.uniqueAndroid.ximalaya.R;
-import com.uniqueAndroid.ximalaya.adapters.RecommendListAdapter;
+import com.uniqueAndroid.ximalaya.adapters.AlbumListAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseFragment;
 import com.uniqueAndroid.ximalaya.interfaces.IRecommendViewCallback;
 import com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter;
@@ -34,11 +33,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener, RecommendListAdapter.onRecommendItemClickListener {
+public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener, AlbumListAdapter.onRecommendItemClickListener {
     private static final String TAG = "RecommendFragment";
     private View rootView;
     private RecyclerView recommendRv;
-    private RecommendListAdapter recommendListAdapter;
+    private AlbumListAdapter recommendListAdapter;
     private RecommendPresenter mRecommendPresenter;
     private UILoader uiLoader;
 
@@ -81,7 +80,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
                 outRect.right = UIUtil.dip2px(view.getContext(), 5);
             }
         });
-        recommendListAdapter = new RecommendListAdapter();
+        recommendListAdapter = new AlbumListAdapter();
         recommendRv.setAdapter(recommendListAdapter);
         recommendListAdapter.setOnRecommendItemClickListner(this);
         return rootView;

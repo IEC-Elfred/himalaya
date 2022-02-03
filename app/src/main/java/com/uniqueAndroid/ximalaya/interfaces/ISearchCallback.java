@@ -13,10 +13,17 @@ public interface ISearchCallback {
 
     /**
      * 加载更多的结果返回
+     *
      * @param result 结果
      * @param isOkay true表示加载更多成功，false表示没有更多
      */
-    void onLoadMoreResult(List<Album> result,boolean isOkay);
+    void onLoadMoreResult(List<Album> result, boolean isOkay);
 
-
+    /**
+     * 错误通知回调
+     *
+     * @param errorCode
+     * @param errorMsg
+     */
+    void onError(int errorCode, String errorMsg);
 }

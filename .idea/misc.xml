@@ -5,6 +5,9 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.375" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.17083333333333334" />
+        <entry key="app/src/main/res/drawable/flow_text_bg.xml" value="0.16203703703703703" />
+        <entry key="app/src/main/res/drawable/flow_text_bg_press.xml" value="0.16203703703703703" />
+        <entry key="app/src/main/res/drawable/flow_text_color.xml" value="0.16203703703703703" />
         <entry key="app/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.21666666666666667" />
         <entry key="app/src/main/res/drawable/ic_baseline_play_arrow.xml" value="0.17083333333333334" />
         <entry key="app/src/main/res/drawable/ic_baseline_play_circle_outline_24.xml" value="0.21666666666666667" />
@@ -12,6 +15,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_skip_next_24.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/drawable/ic_baseline_skip_previous_24.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/drawable/mode_list.xml" value="0.21666666666666667" />
+        <entry key="app/src/main/res/drawable/selector_flow_text.xml" value="0.16203703703703703" />
         <entry key="app/src/main/res/drawable/selector_player_next.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/drawable/selector_player_previous.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/drawable/shape_album_item_bg.xml" value="0.2" />
@@ -33,8 +37,10 @@
         <entry key="app/src/main/res/layout/item_detail_list.xml" value="0.15052083333333333" />
         <entry key="app/src/main/res/layout/item_play_list.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_recommend.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_text.xml" value="0.13975782038345105" />
         <entry key="app/src/main/res/layout/item_track_pager.xml" value="0.13645833333333332" />
         <entry key="app/src/main/res/layout/pop_play_list.xml" value="0.3069139966273187" />
+        <entry key="app/src/main/res/layout/search_result_layout.xml" value="0.13975782038345105" />
       </map>
     </option>
   </component>

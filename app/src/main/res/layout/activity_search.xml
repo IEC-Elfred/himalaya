@@ -12,10 +12,12 @@
         android:gravity="center"
         android:orientation="horizontal">
         <ImageView
+            android:id="@+id/search_back"
             android:layout_width="40dp"
             android:src="@drawable/ic_baseline_navigate_before_24"
             android:layout_height="40dp"/>
         <EditText
+            android:id="@+id/search_input"
             android:textCursorDrawable="@drawable/shape_edit_text_cursor"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -25,6 +27,7 @@
             android:background="@drawable/shape_edit_text_bg"
             android:layout_height="34dp"/>
         <TextView
+            android:id="@+id/search_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="搜索"
@@ -40,4 +43,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/search_container"/>
+<!--    <com.uniqueAndroid.ximalaya.views.FlowTextLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/flow_text_layout"-->
+<!--        android:layout_margin="10dp"/>-->
 </LinearLayout>
