@@ -124,6 +124,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             mUiLoader = new UILoader(this) {
                 @Override
                 protected View getSuccessView(ViewGroup container) {
+                    LogUtil.d(TAG,"success");
                     return createSuccessView(container);
                 }
             };
@@ -202,6 +203,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         }
 
         if (mUiLoader != null) {
+            LogUtil.d(TAG,"UILoader.UIStatus.SUCCESS");
             mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
         }
         //更新ui数据

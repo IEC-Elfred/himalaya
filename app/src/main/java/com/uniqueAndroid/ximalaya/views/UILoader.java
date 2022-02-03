@@ -58,9 +58,9 @@ public abstract class UILoader extends FrameLayout {
     }
 
     private void switchUIByCurrentStatus() {
+        LogUtil.d(TAG, "currentStatus----> " + mCurrentStatus);
         //加载中
         if (loadingView == null) {
-            LogUtil.d(TAG,"currentStatus----> Empty");
             loadingView = getLoadingView();
             addView(loadingView);
         }
@@ -69,7 +69,6 @@ public abstract class UILoader extends FrameLayout {
 
         //成功
         if (successView == null) {
-            LogUtil.d(TAG,"currentStatus----> Success");
             successView = getSuccessView(this);
             addView(successView);
         }
@@ -78,7 +77,6 @@ public abstract class UILoader extends FrameLayout {
 
         //网络错误页面
         if (networkErrorView == null) {
-            LogUtil.d(TAG,"currentStatus----> Error");
             networkErrorView = getNetworkErrorView();
             addView(networkErrorView);
         }

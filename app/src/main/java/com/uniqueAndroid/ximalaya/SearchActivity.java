@@ -1,6 +1,7 @@
 package com.uniqueAndroid.ximalaya;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +26,8 @@ import com.uniqueAndroid.ximalaya.views.FlowTextLayout;
 import com.uniqueAndroid.ximalaya.views.UILoader;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.word.HotWord;
+
+import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -155,6 +159,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
         mResultListView.setLayoutManager(layoutManager);
         mAlbumListAdapter = new AlbumListAdapter();
         mResultListView.setAdapter(mAlbumListAdapter);
+        mResultListView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                outRect.top = UIUtil.dip2px(view.getContext(), 5);
+                outRect.bottom = UIUtil.dip2px(view.getContext(), 5);
+                outRect.left = UIUtil.dip2px(view.getContext(), 5);
+                outRect.right = UIUtil.dip2px(view.getContext(), 5);
+            }
+        });
         return resultView;
     }
 

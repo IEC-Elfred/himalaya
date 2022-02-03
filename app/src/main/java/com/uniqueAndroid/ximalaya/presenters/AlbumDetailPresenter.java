@@ -62,19 +62,36 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
         ximalayaApi.getAlbumDetail(new IDataCallBack<TrackList>() {
             @Override
             public void onSuccess(TrackList trackList) {
-
+                if (trackList != null) {
+                    List<Track> tracks = trackList.getTracks();
+                    if (isLoaderMore) {
+                        //上拉加载，结果放到后面
+                        mTracks.addAll(tracks);
+                        handlerLoaderMoreResult(tracks.size());
+                    } else {
+                        //下拉加载，结果放到前面
+                        mTracks.addAll(0, tracks);
+                    }
+                    handlerAlbumDetailResult(mTracks);
+                }
             }
 
             @Override
             public void onError(int i, String s) {
-
+                if (isLoaderMore) {
+                    mCurrentPageIndex--;
+                }
+                LogUtil.d(TAG, "ErrorCode---->" + i);
+                LogUtil.d(TAG, "ErrorMsg---->" + s);
+                handlerError(i, s);
             }
-        },mCurrentAlbumId,mCurrentPageIndex);
+        }, mCurrentAlbumId, mCurrentPageIndex);
 
     }
 
     /**
      * 处理加载更多的结果
+     *
      * @param size >0意味着加载成功
      */
     private void handlerLoaderMoreResult(int size) {
