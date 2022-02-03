@@ -108,15 +108,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
             }
         });
 
-//        mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
-//            @Override
-//            public void onItemClick(String text) {
-//                if (mSearchPresenter != null) {
-//                    mSearchPresenter.reSearch();
-//                    mUILoader.updateStatus(UILoader.UIStatus.LOADING);
-//                }
-//            }
-//        });
+        mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
+            @Override
+            public void onItemClick(String text) {
+               mInputBox.setText(text);
+                if (mSearchPresenter != null) {
+                    mSearchPresenter.doSearch(text);
+                }
+            }
+        });
 
         mUILoader.setOnRetryClickListener(new UILoader.OnRetryClickListener() {
             @Override
@@ -149,12 +149,13 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
     /**
      * 创建数据请求成功的view
+     *
      * @return
      */
     private View createSuccessView() {
         View resultView = LayoutInflater.from(this).inflate(R.layout.search_result_layout, null);
         mResultListView = resultView.findViewById(R.id.result_list_view);
-        Context context;
+        mFlowTextLayout = resultView.findViewById(R.id.recommend_hot_word_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mResultListView.setLayoutManager(layoutManager);
         mAlbumListAdapter = new AlbumListAdapter();
@@ -173,8 +174,11 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
     @Override
     public void onSearchResultLoad(List<Album> result) {
+        mResultListView.setVisibility(View.VISIBLE);
+        mFlowTextLayout.setVisibility(View.GONE);
+
         InputMethodManager systemService = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        systemService.hideSoftInputFromWindow(mInputBox.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+        systemService.hideSoftInputFromWindow(mInputBox.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         if (result != null) {
             if (result.size() == 0) {
                 if (mUILoader != null) {
@@ -189,6 +193,11 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
     @Override
     public void onHotWordLoad(List<HotWord> hotWordList) {
+        mResultListView.setVisibility(View.GONE);
+        mFlowTextLayout.setVisibility(View.VISIBLE);
+        if (mUILoader != null) {
+            mUILoader.updateStatus(UILoader.UIStatus.SUCCESS);
+        }
         LogUtil.d(TAG, "hotWordList size --->" + hotWordList.size());
         List<String> hotwords = new ArrayList<>();
         hotwords.clear();
@@ -197,7 +206,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
             hotwords.add(searchword);
         }
         Collections.sort(hotwords);
-//        mFlowTextLayout.setTextContents(hotwords);
+        mFlowTextLayout.setTextContents(hotwords);
     }
 
     @Override
