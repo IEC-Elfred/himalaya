@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +47,9 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     private UILoader mUILoader;
     private RecyclerView mResultListView;
     private AlbumListAdapter mAlbumListAdapter;
+    private InputMethodManager mSystemService;
+    private ImageView mDelBtn;
+    public static final int TIME_SHOW_IMM = 500;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     }
 
     private void initPresenter() {
+        mSystemService = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         mSearchPresenter = SearchPresenter.getSearchPresenter();
         mSearchPresenter.registerViewCallback(this);
         mSearchPresenter.getHotWord();
@@ -97,9 +103,12 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                LogUtil.d(TAG, "content" + s);
-                LogUtil.d(TAG, "start" + start);
-                LogUtil.d(TAG, "before" + before);
+                if (TextUtils.isEmpty(s)) {
+                    mSearchPresenter.getHotWord();
+                    mDelBtn.setVisibility(View.GONE);
+                } else {
+                    mDelBtn.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -112,8 +121,12 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
             @Override
             public void onItemClick(String text) {
                mInputBox.setText(text);
+               mInputBox.setSelection(text.length());
                 if (mSearchPresenter != null) {
                     mSearchPresenter.doSearch(text);
+                }
+                if (mUILoader != null) {
+                    mUILoader.updateStatus(UILoader.UIStatus.LOADING);
                 }
             }
         });
@@ -124,11 +137,27 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
             }
         });
+
+        mDelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mInputBox.setText("");
+            }
+        });
     }
 
     private void initView() {
         mBackBtn = this.findViewById(R.id.search_back);
         mInputBox = this.findViewById(R.id.search_input);
+        mDelBtn = this.findViewById(R.id.search_input_delete);
+        mDelBtn.setVisibility(View.GONE);
+        mInputBox.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mInputBox.requestFocus();
+                mSystemService.showSoftInput(mInputBox,InputMethodManager.SHOW_IMPLICIT);
+            }
+        },TIME_SHOW_IMM);
         mSearchBtn = this.findViewById(R.id.search_btn);
         mResultContainer = this.findViewById(R.id.search_container);
 //        mFlowTextLayout = this.findViewById(R.id.flow_text_layout);
@@ -177,8 +206,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
         mResultListView.setVisibility(View.VISIBLE);
         mFlowTextLayout.setVisibility(View.GONE);
 
-        InputMethodManager systemService = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        systemService.hideSoftInputFromWindow(mInputBox.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        mSystemService.hideSoftInputFromWindow(mInputBox.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         if (result != null) {
             if (result.size() == 0) {
                 if (mUILoader != null) {

@@ -101,6 +101,7 @@ public class SearchPresenter implements ISearchPresenter {
 
     @Override
     public void getHotWord() {
+        //todo: 缓存
         mXimalayaApi.getHotWords(new IDataCallBack<HotWordList>() {
             @Override
             public void onSuccess(HotWordList hotWordList) {
