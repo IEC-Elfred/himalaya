@@ -9,6 +9,12 @@
         android:overScrollMode="never"
         android:visibility="gone"
         android:id="@+id/result_list_view"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:visibility="gone"
+        android:id="@+id/search_recommend_list"/>
     <com.uniqueAndroid.ximalaya.views.FlowTextLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

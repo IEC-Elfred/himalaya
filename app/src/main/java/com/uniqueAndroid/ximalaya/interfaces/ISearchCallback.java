@@ -2,6 +2,7 @@ package com.uniqueAndroid.ximalaya.interfaces;
 
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.word.HotWord;
+import com.ximalaya.ting.android.opensdk.model.word.QueryResult;
 
 import java.util.List;
 
@@ -26,4 +27,10 @@ public interface ISearchCallback {
      * @param errorMsg
      */
     void onError(int errorCode, String errorMsg);
+
+    /**
+     * 联想关键字结果回调
+     * @param keyWordList
+     */
+    void onRecommendWordLoaded(List<QueryResult> keyWordList);
 }
