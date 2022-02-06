@@ -1,6 +1,7 @@
 package com.uniqueAndroid.ximalaya.adapters;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,13 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
         return 0;
     }
 
+    public int getDataSize() {
+        if (mData != null) {
+            return mData.size();
+        }
+        return 0;
+    }
+
     public class InnerHolder extends RecyclerView.ViewHolder {
         public InnerHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,8 +95,12 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
             albumDescTv.setText(album.getAlbumIntro());
             albumPlayCountTv.setText(String.format("%d", album.getPlayCount()));
             albumContentCountTv.setText(String.format("%d", album.getIncludeTrackCount()));
-
-            Picasso.get().load(album.getCoverUrlLarge()).into(albumCoverIv);
+            String coverUrlLarge = album.getCoverUrlLarge();
+            if (!TextUtils.isEmpty(coverUrlLarge)) {
+                Picasso.get().load(album.getCoverUrlLarge()).into(albumCoverIv);
+            } else {
+                albumCoverIv.setImageResource(R.mipmap.ic_launcher);
+            }
         }
     }
 

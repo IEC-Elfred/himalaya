@@ -3,6 +3,7 @@ package com.uniqueAndroid.ximalaya.presenters;
 import com.uniqueAndroid.ximalaya.api.XimalayaApi;
 import com.uniqueAndroid.ximalaya.interfaces.ISearchCallback;
 import com.uniqueAndroid.ximalaya.interfaces.ISearchPresenter;
+import com.uniqueAndroid.ximalaya.utils.Constants;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
@@ -23,6 +24,7 @@ public class SearchPresenter implements ISearchPresenter {
     private final XimalayaApi mXimalayaApi;
     private static final int DEFAULT_PAGE = 1;
     private int mCurrentPage = DEFAULT_PAGE;
+    private List<Album> mSearchResults = new ArrayList<>();
 
     private SearchPresenter() {
         mXimalayaApi = XimalayaApi.getXimalayaApi();
@@ -58,6 +60,8 @@ public class SearchPresenter implements ISearchPresenter {
 
     @Override
     public void doSearch(String keyword) {
+        mCurrentPage = DEFAULT_PAGE;
+        mSearchResults.clear();
         this.mCurrentKeyword = keyword;
         search(keyword);
     }
@@ -67,23 +71,37 @@ public class SearchPresenter implements ISearchPresenter {
             @Override
             public void onSuccess(SearchAlbumList searchAlbumList) {
                 List<Album> albums = searchAlbumList.getAlbums();
-                if (albums!= null) {
-                    LogUtil.d(TAG,"albums size --->" + albums.size());
-                    for (ISearchCallback iSearchCallback : mCallbacks) {
-                        iSearchCallback.onSearchResultLoad(albums);
+                mSearchResults.addAll(albums);
+                if (albums != null) {
+                    LogUtil.d(TAG, "albums size --->" + albums.size());
+                    if (mIsLoaderMore) {
+                        for (ISearchCallback callback : mCallbacks) {
+                            callback.onLoadMoreResult(mSearchResults,albums.size() !=0);
+                        }
+                        mIsLoaderMore = false;
+                    } else {
+                        for (ISearchCallback iSearchCallback : mCallbacks) {
+                            iSearchCallback.onSearchResultLoad(mSearchResults);
+                        }
                     }
                 } else {
-                    LogUtil.d(TAG,"albums is null ..");
+                    LogUtil.d(TAG, "albums is null ..");
                 }
 
             }
 
             @Override
             public void onError(int i, String s) {
-                LogUtil.d(TAG,"error code --->" + i);
-                LogUtil.d(TAG,"errorMsg --->" + s);
+                LogUtil.d(TAG, "error code --->" + i);
+                LogUtil.d(TAG, "errorMsg --->" + s);
                 for (ISearchCallback callback : mCallbacks) {
-                    callback.onError(i,s);
+                    if (mIsLoaderMore) {
+                        callback.onLoadMoreResult(mSearchResults, false);
+                        mIsLoaderMore = false;
+                        mCurrentPage--;
+                    } else {
+                        callback.onError(i, s);
+                    }
                 }
             }
         });
@@ -94,9 +112,20 @@ public class SearchPresenter implements ISearchPresenter {
         search(mCurrentKeyword);
     }
 
+    private boolean mIsLoaderMore = false;
+
     @Override
     public void loadMore() {
-
+        //判断有没有必要进行加载更多
+        if (mSearchResults.size() < Constants.COUNT_DEFAULT) {
+            for (ISearchCallback callback : mCallbacks) {
+                callback.onLoadMoreResult(mSearchResults,false);
+            }
+        } else {
+            mIsLoaderMore = true;
+            mCurrentPage++;
+            search(mCurrentKeyword);
+        }
     }
 
     @Override
@@ -107,7 +136,7 @@ public class SearchPresenter implements ISearchPresenter {
             public void onSuccess(HotWordList hotWordList) {
                 if (hotWordList != null) {
                     List<HotWord> hotWords = hotWordList.getHotWordList();
-                    LogUtil.d(TAG,"hotWords size ---> " + hotWords.size());
+                    LogUtil.d(TAG, "hotWords size ---> " + hotWords.size());
                     for (ISearchCallback iSearchCallback : mCallbacks) {
                         iSearchCallback.onHotWordLoad(hotWords);
                     }
@@ -116,8 +145,8 @@ public class SearchPresenter implements ISearchPresenter {
 
             @Override
             public void onError(int i, String s) {
-                LogUtil.d(TAG,"getHotWord errorCode --->" + i);
-                LogUtil.d(TAG,"getHotWord errorMsg ---> " + s);
+                LogUtil.d(TAG, "getHotWord errorCode --->" + i);
+                LogUtil.d(TAG, "getHotWord errorMsg ---> " + s);
 
             }
         });
@@ -133,14 +162,14 @@ public class SearchPresenter implements ISearchPresenter {
                     for (ISearchCallback iSearchCallback : mCallbacks) {
                         iSearchCallback.onRecommendWordLoaded(keyWordList);
                     }
-                    LogUtil.d(TAG,"keyWordList size ---> " + keyWordList.size());
+                    LogUtil.d(TAG, "keyWordList size ---> " + keyWordList.size());
                 }
             }
 
             @Override
             public void onError(int i, String s) {
-                LogUtil.d(TAG,"getRecommendWord errorCode --->" + i);
-                LogUtil.d(TAG,"getRecommendWord errorMsg ---> " + s);
+                LogUtil.d(TAG, "getRecommendWord errorCode --->" + i);
+                LogUtil.d(TAG, "getRecommendWord errorMsg ---> " + s);
             }
         });
     }

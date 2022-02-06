@@ -13,17 +13,21 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.uniqueAndroid.ximalaya.adapters.AlbumListAdapter;
 import com.uniqueAndroid.ximalaya.adapters.SearchRecommendAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseActivity;
 import com.uniqueAndroid.ximalaya.interfaces.ISearchCallback;
 import com.uniqueAndroid.ximalaya.presenters.SearchPresenter;
+import com.uniqueAndroid.ximalaya.utils.Constants;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.uniqueAndroid.ximalaya.views.FlowTextLayout;
 import com.uniqueAndroid.ximalaya.views.UILoader;
@@ -54,6 +58,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     public static final int TIME_SHOW_IMM = 500;
     private RecyclerView mSearchRecommendList;
     private SearchRecommendAdapter mSearchRecommendAdapter;
+    private TwinklingRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +86,17 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     }
 
     private void initEvent() {
+
+        mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
+            @Override
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                super.onLoadMore(refreshLayout);
+                if (mSearchPresenter != null) {
+                    mSearchPresenter.loadMore();
+                }
+            }
+        });
+
         mBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,14 +142,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
         mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
             @Override
             public void onItemClick(String text) {
-                mInputBox.setText(text);
-                mInputBox.setSelection(text.length());
-                if (mSearchPresenter != null) {
-                    mSearchPresenter.doSearch(text);
-                }
-                if (mUILoader != null) {
-                    mUILoader.updateStatus(UILoader.UIStatus.LOADING);
-                }
+                switchToSearch(text);
             }
         });
 
@@ -155,9 +164,20 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
             mSearchRecommendAdapter.setItemClickListener(new SearchRecommendAdapter.ItemClickListener() {
                 @Override
                 public void onItemClick(String keyword) {
-
+                    switchToSearch(keyword);
                 }
             });
+        }
+    }
+
+    private void switchToSearch(String text) {
+        mInputBox.setText(text);
+        mInputBox.setSelection(text.length());
+        if (mSearchPresenter != null) {
+            mSearchPresenter.doSearch(text);
+        }
+        if (mUILoader != null) {
+            mUILoader.updateStatus(UILoader.UIStatus.LOADING);
         }
     }
 
@@ -209,6 +229,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
      */
     private View createSuccessView() {
         View resultView = LayoutInflater.from(this).inflate(R.layout.search_result_layout, null);
+        mRefreshLayout = (TwinklingRefreshLayout) resultView.findViewById(R.id.search_result_refresh_layout);
         mResultListView = resultView.findViewById(R.id.result_list_view);
         mFlowTextLayout = resultView.findViewById(R.id.recommend_hot_word_view);
         LinearLayoutManager resultLayoutManager = new LinearLayoutManager(this);
@@ -244,9 +265,13 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
     @Override
     public void onSearchResultLoad(List<Album> result) {
-        hideSuccessView();
-        mResultListView.setVisibility(View.VISIBLE);
+        handleSearchResult(result);
         mSystemService.hideSoftInputFromWindow(mInputBox.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    private void handleSearchResult(List<Album> result) {
+        hideSuccessView();
+        mRefreshLayout.setVisibility(View.VISIBLE);
         if (result != null) {
             if (result.size() == 0) {
                 if (mUILoader != null) {
@@ -279,7 +304,14 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
     @Override
     public void onLoadMoreResult(List<Album> result, boolean isOkay) {
-
+        if (mRefreshLayout != null) {
+            mRefreshLayout.finishLoadmore();
+        }
+        if (isOkay) {
+            handleSearchResult(result);
+        } else {
+            Toast.makeText(getApplicationContext(),"没有更多内容",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -305,7 +337,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
     private void hideSuccessView() {
         mSearchRecommendList.setVisibility(View.GONE);
-        mResultListView.setVisibility(View.GONE);
+        mRefreshLayout.setVisibility(View.GONE);
         mFlowTextLayout.setVisibility(View.GONE);
     }
 
