@@ -1,6 +1,7 @@
 package com.uniqueAndroid.ximalaya;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -26,6 +27,7 @@ import com.uniqueAndroid.ximalaya.adapters.AlbumListAdapter;
 import com.uniqueAndroid.ximalaya.adapters.SearchRecommendAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseActivity;
 import com.uniqueAndroid.ximalaya.interfaces.ISearchCallback;
+import com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter;
 import com.uniqueAndroid.ximalaya.presenters.SearchPresenter;
 import com.uniqueAndroid.ximalaya.utils.Constants;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
@@ -42,7 +44,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class SearchActivity extends BaseActivity implements ISearchCallback {
+public class SearchActivity extends BaseActivity implements ISearchCallback, AlbumListAdapter.onRecommendItemClickListener {
     private static final String TAG = "SearchActivity";
     private EditText mInputBox;
     private View mBackBtn;
@@ -168,6 +170,8 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
                 }
             });
         }
+
+        mAlbumListAdapter.setOnRecommendItemClickListner(this);
     }
 
     private void switchToSearch(String text) {
@@ -230,6 +234,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     private View createSuccessView() {
         View resultView = LayoutInflater.from(this).inflate(R.layout.search_result_layout, null);
         mRefreshLayout = (TwinklingRefreshLayout) resultView.findViewById(R.id.search_result_refresh_layout);
+        mRefreshLayout.setEnableRefresh(false);
         mResultListView = resultView.findViewById(R.id.result_list_view);
         mFlowTextLayout = resultView.findViewById(R.id.recommend_hot_word_view);
         LinearLayoutManager resultLayoutManager = new LinearLayoutManager(this);
@@ -342,4 +347,10 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     }
 
 
+    @Override
+    public void onItemclick(int position, Album album) {
+        AlbumDetailPresenter.getInstance().setTargetAlbum(album);
+        Intent intent = new Intent(this,DetailActivity.class);
+        startActivity(intent);
+    }
 }
