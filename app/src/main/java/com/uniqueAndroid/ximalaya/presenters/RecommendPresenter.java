@@ -1,22 +1,15 @@
 package com.uniqueAndroid.ximalaya.presenters;
 
-import static android.content.ContentValues.TAG;
-
-import com.uniqueAndroid.ximalaya.api.XimalayaApi;
+import com.uniqueAndroid.ximalaya.data.XimalayaApi;
 import com.uniqueAndroid.ximalaya.interfaces.IRecommendPresenter;
 import com.uniqueAndroid.ximalaya.interfaces.IRecommendViewCallback;
-import com.uniqueAndroid.ximalaya.utils.Constants;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
-import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
-import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.album.GussLikeAlbumList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RecommendPresenter implements IRecommendPresenter {
 

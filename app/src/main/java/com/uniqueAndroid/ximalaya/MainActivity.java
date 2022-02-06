@@ -14,6 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.squareup.picasso.Picasso;
 import com.uniqueAndroid.ximalaya.adapters.IndicatorAdapter;
 import com.uniqueAndroid.ximalaya.adapters.MainContentAdapter;
+import com.uniqueAndroid.ximalaya.data.XimalayaDBHelper;
 import com.uniqueAndroid.ximalaya.interfaces.IPlayerCallback;
 import com.uniqueAndroid.ximalaya.presenters.PlayerPresenter;
 import com.uniqueAndroid.ximalaya.presenters.RecommendPresenter;
@@ -49,6 +50,8 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
         initView();
         initEvent();
         initPresenter();
+        XimalayaDBHelper ximalayaDbHelper = new XimalayaDBHelper(this);
+        ximalayaDbHelper.getWritableDatabase();
     }
 
     private void initPresenter() {

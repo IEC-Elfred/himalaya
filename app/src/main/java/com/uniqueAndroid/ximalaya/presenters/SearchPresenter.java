@@ -1,6 +1,6 @@
 package com.uniqueAndroid.ximalaya.presenters;
 
-import com.uniqueAndroid.ximalaya.api.XimalayaApi;
+import com.uniqueAndroid.ximalaya.data.XimalayaApi;
 import com.uniqueAndroid.ximalaya.interfaces.ISearchCallback;
 import com.uniqueAndroid.ximalaya.interfaces.ISearchPresenter;
 import com.uniqueAndroid.ximalaya.utils.Constants;

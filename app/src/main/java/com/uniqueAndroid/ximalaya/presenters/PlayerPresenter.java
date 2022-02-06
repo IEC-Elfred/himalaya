@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
-import com.uniqueAndroid.ximalaya.api.XimalayaApi;
+import com.uniqueAndroid.ximalaya.data.XimalayaApi;
 import com.uniqueAndroid.ximalaya.base.BaseApplication;
 import com.uniqueAndroid.ximalaya.interfaces.IPlayerCallback;
 import com.uniqueAndroid.ximalaya.interfaces.IPlayerPresenter;

@@ -1,4 +1,4 @@
-package com.uniqueAndroid.ximalaya.api;
+package com.uniqueAndroid.ximalaya.data;
 
 import com.uniqueAndroid.ximalaya.utils.Constants;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
