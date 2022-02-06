@@ -61,6 +61,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
     private RecyclerView mSearchRecommendList;
     private SearchRecommendAdapter mSearchRecommendAdapter;
     private TwinklingRefreshLayout mRefreshLayout;
+    private boolean mNeedSuggestionWords = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,8 +131,12 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
                     mDelBtn.setVisibility(View.GONE);
                 } else {
                     mDelBtn.setVisibility(View.VISIBLE);
-                    //触发联想查询
-                    getSuggestWord(s.toString());
+                    if (mNeedSuggestionWords) {
+                        //触发联想查询
+                        getSuggestWord(s.toString());
+                    } else {
+                        mNeedSuggestionWords = true;
+                    }
                 }
             }
 
@@ -144,6 +149,8 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
         mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
             @Override
             public void onItemClick(String text) {
+                //不需要相关的联想
+                mNeedSuggestionWords = false;
                 switchToSearch(text);
             }
         });
@@ -166,6 +173,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
             mSearchRecommendAdapter.setItemClickListener(new SearchRecommendAdapter.ItemClickListener() {
                 @Override
                 public void onItemClick(String keyword) {
+                    //推荐热词的点击
                     switchToSearch(keyword);
                 }
             });
@@ -315,7 +323,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
         if (isOkay) {
             handleSearchResult(result);
         } else {
-            Toast.makeText(getApplicationContext(),"没有更多内容",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "没有更多内容", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -350,7 +358,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
     @Override
     public void onItemclick(int position, Album album) {
         AlbumDetailPresenter.getInstance().setTargetAlbum(album);
-        Intent intent = new Intent(this,DetailActivity.class);
+        Intent intent = new Intent(this, DetailActivity.class);
         startActivity(intent);
     }
 }
