@@ -111,6 +111,10 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
             @Override
             public void onClick(View v) {
                 String keyword = mInputBox.getText().toString().trim();
+                if (TextUtils.isEmpty(keyword)) {
+                    Toast.makeText(SearchActivity.this, "搜索关键字不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (mSearchPresenter != null) {
                     mSearchPresenter.doSearch(keyword);
                     mUILoader.updateStatus(UILoader.UIStatus.LOADING);
@@ -183,6 +187,10 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
     }
 
     private void switchToSearch(String text) {
+        if (TextUtils.isEmpty(text)) {
+            Toast.makeText(this, "搜索关键字不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
         mInputBox.setText(text);
         mInputBox.setSelection(text.length());
         if (mSearchPresenter != null) {
