@@ -50,8 +50,6 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
         initView();
         initEvent();
         initPresenter();
-        XimalayaDBHelper ximalayaDbHelper = new XimalayaDBHelper(this);
-        ximalayaDbHelper.getWritableDatabase();
     }
 
     private void initPresenter() {
