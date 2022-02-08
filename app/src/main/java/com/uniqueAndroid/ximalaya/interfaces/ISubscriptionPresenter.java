@@ -3,7 +3,7 @@ package com.uniqueAndroid.ximalaya.interfaces;
 import com.uniqueAndroid.ximalaya.base.IBasePresenter;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
-public interface ISubscriptionPresenter extends IBasePresenter<ISubscriptionPresenter> {
+public interface ISubscriptionPresenter extends IBasePresenter<ISubscriptionCallback> {
 
     /**
      * 添加订阅
@@ -24,4 +24,10 @@ public interface ISubscriptionPresenter extends IBasePresenter<ISubscriptionPres
      */
     void getSubscriptionList();
 
+    /**
+     * 判断当前专辑是否已经收藏/订阅
+     *
+     * @param album
+     */
+    boolean isSub(Album album);
 }
