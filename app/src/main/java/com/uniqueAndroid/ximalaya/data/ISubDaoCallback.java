@@ -11,7 +11,8 @@ public interface ISubDaoCallback {
      *
      * @param isSuccess
      */
-    void onAddResult(boolean isSuccess);
+    void
+    onAddResult(boolean isSuccess);
 
     /**
      * 删除结果回调方法

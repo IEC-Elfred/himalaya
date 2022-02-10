@@ -17,7 +17,6 @@ public class ImageBlur {
         imageview.setImageBitmap(blurred); //radius decide blur amount
     }
 
-
     private static Bitmap blurRenderScript(Bitmap smallBitmap, int radius, Context context) {
         smallBitmap = RGB565toARGB888(smallBitmap);
         Bitmap bitmap = Bitmap.createBitmap(smallBitmap.getWidth(), smallBitmap.getHeight(), Bitmap.Config.ARGB_8888);

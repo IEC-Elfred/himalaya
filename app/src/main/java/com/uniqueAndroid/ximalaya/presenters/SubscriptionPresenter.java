@@ -28,7 +28,6 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
     private SubscriptionPresenter() {
         mSubscriptionDao = SubscriptionDao.getInstance();
         mSubscriptionDao.setCallback(this);
-        listSubscriptions();
     }
 
     private void listSubscriptions() {
@@ -43,7 +42,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
         }).subscribeOn(Schedulers.io()).subscribe();
     }
 
-    private static SubscriptionPresenter getInstance() {
+    public static SubscriptionPresenter getInstance() {
         if (sInstance == null) {
             synchronized (SubscriptionPresenter.class) {
                 sInstance = new SubscriptionPresenter();
@@ -97,11 +96,13 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
     @Override
     public boolean isSub(Album album) {
         Album result = mData.get(album.getId());
-        return result == null;
+        //不为空表示已经订阅
+        return result != null;
     }
 
     @Override
     public void onAddResult(boolean isSuccess) {
+        listSubscriptions();
         //添加结果回调
         BaseApplication.getsHandler().post(new Runnable() {
             @Override
@@ -115,6 +116,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 
     @Override
     public void onDeleteResult(boolean isSuccess) {
+        listSubscriptions();
         //删除订阅的回调
         BaseApplication.getsHandler().post(new Runnable() {
             @Override
@@ -128,6 +130,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 
     @Override
     public void onSubListLoaded(List<Album> result) {
+        mData.clear();
         //加载数据的回调
         for (Album album : result) {
             mData.put(album.getId(), album);
