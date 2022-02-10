@@ -43,7 +43,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class SearchActivity extends BaseActivity implements ISearchCallback, AlbumListAdapter.onRecommendItemClickListener {
+public class SearchActivity extends BaseActivity implements ISearchCallback, AlbumListAdapter.onAlbumClickListener {
     private static final String TAG = "SearchActivity";
     private EditText mInputBox;
     private View mBackBtn;

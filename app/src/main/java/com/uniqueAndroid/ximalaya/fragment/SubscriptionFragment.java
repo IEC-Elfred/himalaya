@@ -20,13 +20,14 @@ import com.uniqueAndroid.ximalaya.interfaces.ISubscriptionCallback;
 import com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter;
 import com.uniqueAndroid.ximalaya.presenters.SubscriptionPresenter;
 import com.uniqueAndroid.ximalaya.utils.Constants;
+import com.uniqueAndroid.ximalaya.views.ConfirmDialog;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class SubscriptionFragment extends BaseFragment implements ISubscriptionCallback, AlbumListAdapter.onRecommendItemClickListener {
+public class SubscriptionFragment extends BaseFragment implements ISubscriptionCallback, AlbumListAdapter.onAlbumClickListener, AlbumListAdapter.onAlbumItemLongClickListener, ConfirmDialog.OnDialogActionClickListener {
     private SubscriptionPresenter mSubscriptionPresenter;
     private RecyclerView mSubListView;
     private AlbumListAdapter mAlumlistAdapter;
@@ -50,6 +51,7 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
         });
         mAlumlistAdapter = new AlbumListAdapter();
         mAlumlistAdapter.setOnAlbumClickListener(this);
+        mAlumlistAdapter.setOnAlbumItemLongClickListener(this);
         mSubListView.setAdapter(mAlumlistAdapter);
         mSubscriptionPresenter = SubscriptionPresenter.getInstance();
         mSubscriptionPresenter.registerViewCallback(this);
@@ -96,5 +98,23 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
         //item被点击，跳转到详情界面
         Intent intent = new Intent(getContext(), DetailActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemLongClick(Album album) {
+        //订阅的item被长按了
+        ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
+        confirmDialog.setOnDialogActionClickListener(this);
+        confirmDialog.show();
+    }
+
+    @Override
+    public void onCancelSubClick() {
+        //取消订阅
+    }
+
+    @Override
+    public void onGiveUpClick() {
+        //放弃取消订阅
     }
 }
