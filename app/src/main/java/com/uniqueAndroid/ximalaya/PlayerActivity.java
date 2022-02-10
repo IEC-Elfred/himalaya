@@ -79,7 +79,6 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         initView();
         mPlayerPresenter = PlayerPresenter.getPlayerPresenter();
         mPlayerPresenter.registerViewCallback(this);
-        mPlayerPresenter.getPlayList();
         initEvent();
         initBgAnimation();
     }

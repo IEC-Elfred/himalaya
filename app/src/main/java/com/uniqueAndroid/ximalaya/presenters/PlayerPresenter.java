@@ -86,17 +86,19 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void registerViewCallback(IPlayerCallback iPlayerCallback) {
+        if (!mIPlayerCallbacks.contains(iPlayerCallback)) {
+            mIPlayerCallbacks.add(iPlayerCallback);
+        }
+        //更新之前，让UI的Pager有数据
+        getPlayList();
         //通知当前的节目
         iPlayerCallback.onTrackUpdate(mCurrentTrack, mCurrentIndex);
-        iPlayerCallback.onProgressChange(mCurrentProgressPosition,mProgressDuration);
+        iPlayerCallback.onProgressChange(mCurrentProgressPosition, mProgressDuration);
         //更新状态
         handlePlayState(iPlayerCallback);
         int anInt = mPlayModeSp.getInt(PLAY_MODE_SP_KEY, PLAY_MODE_LIST_INT);
         mCurrentPlayMode = getModeByPlayInt(anInt);
         iPlayerCallback.onPlayModeChange(getModeByPlayInt(anInt));
-        if (!mIPlayerCallbacks.contains(iPlayerCallback)) {
-            mIPlayerCallbacks.add(iPlayerCallback);
-        }
     }
 
     private void handlePlayState(IPlayerCallback iPlayerCallback) {
@@ -255,8 +257,8 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
             @Override
             public void onError(int i, String s) {
-                LogUtil.d(TAG,"errorCode--->" + i);
-                LogUtil.d(TAG,"errorCode--->" + s);
+                LogUtil.d(TAG, "errorCode--->" + i);
+                LogUtil.d(TAG, "errorCode--->" + s);
                 Toast.makeText(BaseApplication.getAppContext(), "请求数据错误...", Toast.LENGTH_SHORT).show();
 
             }
