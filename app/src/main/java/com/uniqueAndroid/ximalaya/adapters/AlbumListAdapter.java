@@ -49,7 +49,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
             @Override
             public void onClick(View v) {
                 if (mItemClickListner != null) {
-                    mItemClickListner.onItemclick(position,mData.get(position));
+                    mItemClickListner.onItemClick(position,mData.get(position));
                 }
                 Log.d(TAG, "itemClick --->" + v.getTag());
             }
@@ -104,11 +104,11 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
         }
     }
 
-    public void setOnRecommendItemClickListner(onRecommendItemClickListener listener) {
+    public void setOnAlbumClickListener(onRecommendItemClickListener listener) {
         this.mItemClickListner = listener;
     }
 
     public interface onRecommendItemClickListener {
-        void onItemclick(int position, Album album);
+        void onItemClick(int position, Album album);
     }
 }

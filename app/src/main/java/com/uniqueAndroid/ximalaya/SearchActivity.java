@@ -29,7 +29,6 @@ import com.uniqueAndroid.ximalaya.base.BaseActivity;
 import com.uniqueAndroid.ximalaya.interfaces.ISearchCallback;
 import com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter;
 import com.uniqueAndroid.ximalaya.presenters.SearchPresenter;
-import com.uniqueAndroid.ximalaya.utils.Constants;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.uniqueAndroid.ximalaya.views.FlowTextLayout;
 import com.uniqueAndroid.ximalaya.views.UILoader;
@@ -183,7 +182,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
             });
         }
 
-        mAlbumListAdapter.setOnRecommendItemClickListner(this);
+        mAlbumListAdapter.setOnAlbumClickListener(this);
     }
 
     private void switchToSearch(String text) {
@@ -364,7 +363,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
 
 
     @Override
-    public void onItemclick(int position, Album album) {
+    public void onItemClick(int position, Album album) {
         AlbumDetailPresenter.getInstance().setTargetAlbum(album);
         Intent intent = new Intent(this, DetailActivity.class);
         startActivity(intent);

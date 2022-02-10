@@ -5,6 +5,7 @@ import com.uniqueAndroid.ximalaya.data.ISubDaoCallback;
 import com.uniqueAndroid.ximalaya.data.SubscriptionDao;
 import com.uniqueAndroid.ximalaya.interfaces.ISubscriptionCallback;
 import com.uniqueAndroid.ximalaya.interfaces.ISubscriptionPresenter;
+import com.uniqueAndroid.ximalaya.utils.Constants;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import java.util.ArrayList;
@@ -66,6 +67,9 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 
     @Override
     public void addSubscription(Album album) {
+        if (mData.size() >= Constants.MAX_SUB_COUNT) {
+
+        }
         Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Object> emitter) throws Throwable {

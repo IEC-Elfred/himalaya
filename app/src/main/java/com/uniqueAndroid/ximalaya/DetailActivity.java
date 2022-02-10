@@ -35,6 +35,7 @@ import com.uniqueAndroid.ximalaya.interfaces.ISubscriptionCallback;
 import com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter;
 import com.uniqueAndroid.ximalaya.presenters.PlayerPresenter;
 import com.uniqueAndroid.ximalaya.presenters.SubscriptionPresenter;
+import com.uniqueAndroid.ximalaya.utils.Constants;
 import com.uniqueAndroid.ximalaya.utils.ImageBlur;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.uniqueAndroid.ximalaya.views.UILoader;
@@ -452,8 +453,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 
     @Override
     public void onSubscriptionLoaded(List<Album> albums) {
-        for (Album album : albums) {
-            LogUtil.d(TAG, "album --> " + album.getAlbumTitle());
-        }
+
+    }
+
+    @Override
+    public void onSubFull() {
+        Toast.makeText(this, "订阅数量不得超过"+ Constants.MAX_SUB_COUNT, Toast.LENGTH_SHORT).show();
     }
 }

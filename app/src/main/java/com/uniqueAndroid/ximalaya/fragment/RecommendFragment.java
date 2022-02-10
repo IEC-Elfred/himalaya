@@ -82,7 +82,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         });
         recommendListAdapter = new AlbumListAdapter();
         recommendRv.setAdapter(recommendListAdapter);
-        recommendListAdapter.setOnRecommendItemClickListner(this);
+        recommendListAdapter.setOnAlbumClickListener(this);
         return rootView;
     }
 
@@ -168,7 +168,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 
 
     @Override
-    public void onItemclick(int position, Album album) {
+    public void onItemClick(int position, Album album) {
         AlbumDetailPresenter.getInstance().setTargetAlbum(album);
         //item被点击，跳转到详情界面
         Intent intent = new Intent(getContext(), DetailActivity.class);

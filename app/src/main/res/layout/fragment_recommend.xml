@@ -5,12 +5,12 @@
     <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#fff4f4f4"
         android:id="@+id/over_scorll_view">
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/recommend_list"
-            android:background="#fff4f4f4">
+            android:id="@+id/recommend_list">
 
         </androidx.recyclerview.widget.RecyclerView>
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>

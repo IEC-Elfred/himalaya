@@ -93,7 +93,7 @@ public class SubscriptionDao implements ISubDAO {
         try {
             db = mXimalayaDBHelper.getReadableDatabase();
             db.beginTransaction();
-            Cursor query = db.query(Constants.SUB_TB_NAME, null, null, null, null, null, null);
+            Cursor query = db.query(Constants.SUB_TB_NAME, null, null, null, null, null, "_id desc");
             while (query.moveToNext()) {
                 Album album = new Album();
                 //
