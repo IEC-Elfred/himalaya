@@ -3,7 +3,7 @@ package com.uniqueAndroid.ximalaya.interfaces;
 import com.uniqueAndroid.ximalaya.base.IBasePresenter;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
-public interface IHistoryPresenter extends IBasePresenter {
+public interface IHistoryPresenter extends IBasePresenter<IHistoryCallback> {
     /**
      * 获取历史内容
      */
