@@ -30,4 +30,15 @@ public class Constants {
     //订阅最多个数
     public static final int MAX_SUB_COUNT = 100;
 
+    //历史记录的表名
+    public static final String HISTORY_TB_NAME = "tb_history";
+    public static final  String HISTORY_ID = "_id";
+    public static final  String HISTORY_TRACK_ID = "trackId";
+    public static final  String HISTORY_TITLE = "historyTitle";
+    public static final  String HISTORY_PLAY_COUNT = "historyPlayCount";
+    public static final  String HISTORY_DURATION = "historyDuration";
+    public static final  String HISTORY_UPDATE_TIME = "historyUpdateTime";
+    public static final  String HISTORY_COVER = "historyCover";
+
+
 }

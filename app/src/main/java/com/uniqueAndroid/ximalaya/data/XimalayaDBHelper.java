@@ -39,6 +39,17 @@ public class XimalayaDBHelper extends SQLiteOpenHelper {
         //图片、title、描述、播放量、节目数量、作者名称、专辑id
         String subTbSQL = "create table " + Constants.SUB_TB_NAME + "(" + Constants.SUB_ID + " integer primary key autoincrement," + Constants.SUB_COVER_URL + " varchar," + Constants.SUB_TITLE + " varchar," + Constants.SUB_DESCRIPTION + " varchar," + Constants.SUB_PLAY_COUNT + " integer," + Constants.SUB_TB_TRACK_COUNT + " integer," + Constants.SUB_AUTHOR_NAME + " varchar," + Constants.SUB_ALBUM_ID + " integer);\n";
         db.execSQL(subTbSQL);
+
+        //创建历史记录表
+        String historyTbSql = "create table " + Constants.HISTORY_TB_NAME + "(" +
+                Constants.HISTORY_ID + " integer primary key autoincrement," +
+                Constants.HISTORY_TRACK_ID + " integer," +
+                Constants.HISTORY_TITLE + "varchar," +
+                Constants.HISTORY_COVER + "varchar," +
+                Constants.HISTORY_PLAY_COUNT + " integer," +
+                Constants.HISTORY_DURATION + " integer," +
+                Constants.HISTORY_UPDATE_TIME + " integer);\n";
+        db.execSQL(historyTbSql);
     }
 
     @Override

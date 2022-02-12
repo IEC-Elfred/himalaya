@@ -14,7 +14,7 @@ public interface IHistoryDao {
      * 添加历史
      * @param track
      */
-    void addTracks(Track track);
+    void addHistory(Track track);
 
     /**
      * 删除历史

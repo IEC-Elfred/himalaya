@@ -12,5 +12,5 @@ public interface IHistoryCallback extends IBasePresenter<IHistoryCallback> {
      * @param tracks
      */
     void onHistoriesLoaded(List<Track> tracks);
-    
+
 }
