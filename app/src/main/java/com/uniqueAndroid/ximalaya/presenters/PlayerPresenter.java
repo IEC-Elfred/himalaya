@@ -352,11 +352,16 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         if (lastModel != null) {
             LogUtil.d(TAG, "lastModel--->" + lastModel.getKind());
         }
-        LogUtil.d(TAG, "curModel--->" + curModel.getKind());
+        if (curModel != null) {
+            LogUtil.d(TAG, "curModel--->" + curModel.getKind());
+        }
         mCurrentIndex = mPlayerManager.getCurrentIndex();
         //curModel是当前播放的内容
         if (curModel instanceof Track) {
             mCurrentTrack = (Track) curModel;
+            //保存播放记录
+            HistoryPresenter historyPresenter = HistoryPresenter.getHistoryPresenter();
+            historyPresenter.addHistory(mCurrentTrack);
             for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
                 iPlayerCallback.onTrackUpdate(mCurrentTrack, mCurrentIndex);
             }
