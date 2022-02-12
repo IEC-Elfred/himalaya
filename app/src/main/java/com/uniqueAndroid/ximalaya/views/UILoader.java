@@ -92,7 +92,7 @@ public abstract class UILoader extends FrameLayout {
         emptyView.setVisibility(mCurrentStatus == UIStatus.EMPTY ? VISIBLE : GONE);
     }
 
-    private View getEmptyView() {
+    protected View getEmptyView() {
         return LayoutInflater.from(getContext()).inflate(R.layout.fragment_empty_view, this, false);
     }
 
@@ -108,8 +108,6 @@ public abstract class UILoader extends FrameLayout {
         });
         return networkErrorView;
     }
-
-    ;
 
     protected abstract View getSuccessView(ViewGroup container);
 
