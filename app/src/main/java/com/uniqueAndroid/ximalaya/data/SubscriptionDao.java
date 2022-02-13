@@ -121,9 +121,6 @@ public class SubscriptionDao implements ISubDAO {
                 album.setAnnouncer(announcer);
                 result.add(album);
             }
-            if (mCallback != null) {
-                mCallback.onSubListLoaded(result);
-            }
             query.close();
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -133,7 +130,9 @@ public class SubscriptionDao implements ISubDAO {
                 db.endTransaction();
                 db.close();
             }
-
+            if (mCallback != null) {
+                mCallback.onSubListLoaded(result);
+            }
         }
     }
 

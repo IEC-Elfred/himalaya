@@ -2881,7 +2881,7 @@
 --------- beginning of crash
 01-24 23:46:19.167 E/AndroidRuntime(17224): FATAL EXCEPTION: main
 01-24 23:46:19.167 E/AndroidRuntime(17224): Process: com.uniqueAndroid.ximalaya, PID: 17224
-01-24 23:46:19.167 E/AndroidRuntime(17224): java.lang.NullPointerException: Attempt to invoke virtual method 'void com.uniqueAndroid.ximalaya.adapters.DetailListAdapter.setData(java.util.List)' on a null object reference
+01-24 23:46:19.167 E/AndroidRuntime(17224): java.lang.NullPointerException: Attempt to invoke virtual method 'void com.uniqueAndroid.ximalaya.adapters.TrackListAdapter.setData(java.util.List)' on a null object reference
 01-24 23:46:19.167 E/AndroidRuntime(17224): 	at com.uniqueAndroid.ximalaya.DetailActivity.onDetailListLoaded(DetailActivity.java:117)
 01-24 23:46:19.167 E/AndroidRuntime(17224): 	at com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter.handlerAlbumDetailResult(AlbumDetailPresenter.java:90)
 01-24 23:46:19.167 E/AndroidRuntime(17224): 	at com.uniqueAndroid.ximalaya.presenters.AlbumDetailPresenter.access$000(AlbumDetailPresenter.java:22)

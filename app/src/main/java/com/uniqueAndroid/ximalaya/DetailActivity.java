@@ -26,7 +26,7 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.header.bezierlayout.BezierLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.uniqueAndroid.ximalaya.adapters.DetailListAdapter;
+import com.uniqueAndroid.ximalaya.adapters.TrackListAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseActivity;
 import com.uniqueAndroid.ximalaya.base.BaseApplication;
 import com.uniqueAndroid.ximalaya.interfaces.IAlbumDetailViewCallback;
@@ -47,7 +47,7 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, UILoader.OnRetryClickListener, DetailListAdapter.ItemClickListener, IPlayerCallback, ISubscriptionCallback {
+public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallback, UILoader.OnRetryClickListener, TrackListAdapter.ItemClickListener, IPlayerCallback, ISubscriptionCallback {
     private static final String TAG = "DetailActivity";
     private ImageView bgCover;
     private ImageView smallCover;
@@ -56,7 +56,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private AlbumDetailPresenter albumDetailPresenter;
     private int mCurrentPage = 1;
     private RecyclerView albumDetailList;
-    private DetailListAdapter mDetailListAdapter;
+    private TrackListAdapter mTrackListAdapter;
     private FrameLayout mDetailListContainer;
     private UILoader mUiLoader;
     private long mCurrentId = -1;
@@ -157,7 +157,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initView() {
-        mDetailListAdapter = new DetailListAdapter();
+        mTrackListAdapter = new TrackListAdapter();
         mDetailListContainer = this.findViewById(R.id.detail_list_container);
         if (mUiLoader == null) {
             mUiLoader = new UILoader(this) {
@@ -191,7 +191,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         mRefreshLayout = detailList.findViewById(R.id.refresh_layout);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         albumDetailList.setLayoutManager(layoutManager);
-        albumDetailList.setAdapter(mDetailListAdapter);
+        albumDetailList.setAdapter(mTrackListAdapter);
         albumDetailList.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -201,7 +201,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
                 outRect.right = UIUtil.dip2px(view.getContext(), 5);
             }
         });
-        mDetailListAdapter.setItemClickListener(this);
+        mTrackListAdapter.setItemClickListener(this);
         mRefreshLayout.setHeaderView(new BezierLayout(this));
         mRefreshLayout.setMaxHeadHeight(140);
         mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
@@ -248,7 +248,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
         }
         //更新ui数据
-        mDetailListAdapter.setData(tracks);
+        mTrackListAdapter.setData(tracks);
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
-public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.InnerHolder> {
+public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.InnerHolder> {
     private List<Track> mDetailData = new ArrayList<>();
     //格式化时间
     private SimpleDateFormat mUpdateDateFormat = new SimpleDateFormat("YYYY-MM-dd");
@@ -27,13 +27,13 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.In
 
     @NonNull
     @Override
-    public DetailListAdapter.InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TrackListAdapter.InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_detail_layout, parent, false);
         return new InnerHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DetailListAdapter.InnerHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TrackListAdapter.InnerHolder holder, int position) {
         View itemView = holder.itemView;
         TextView orderTv = itemView.findViewById(R.id.order_text);
         TextView titleTv = itemView.findViewById(R.id.detail_item_title);
