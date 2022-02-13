@@ -24,6 +24,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Inne
     private SimpleDateFormat mUpdateDateFormat = new SimpleDateFormat("YYYY-MM-dd");
     private SimpleDateFormat mDurationFormat = new SimpleDateFormat("mm:ss");
     private ItemClickListener mItemClickListner = null;
+    private ItemLongClickListener mItemLongClickListner = null;
 
     @NonNull
     @Override
@@ -42,10 +43,10 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Inne
         TextView updateDateTv = itemView.findViewById(R.id.detail_item_update_time);
 
         Track track = mDetailData.get(position);
-        orderTv.setText(position+ 1 + "");
+        orderTv.setText(position + 1 + "");
         titleTv.setText(track.getTrackTitle());
         playCountTv.setText(track.getPlayCount() + "");
-        String duration = mDurationFormat.format( track.getDuration()*1000);
+        String duration = mDurationFormat.format(track.getDuration() * 1000);
         durationTv.setText(duration);
         String updateTimeTv = mUpdateDateFormat.format(track.getUpdatedAt());
         updateDateTv.setText(updateTimeTv);
@@ -54,8 +55,17 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Inne
             public void onClick(View v) {
                 if (mItemClickListner != null) {
                     //参数需要有数据和位置
-                    mItemClickListner.onItemClick(mDetailData,position);
+                    mItemClickListner.onItemClick(mDetailData, position);
                 }
+            }
+        });
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mItemLongClickListner != null) {
+                    mItemLongClickListner.onItemLongClick(track);
+                }
+                return true;
             }
         });
     }
@@ -84,4 +94,13 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Inne
     public interface ItemClickListener {
         void onItemClick(List<Track> detailData, int position);
     }
+
+    public void setItemLongClickListener(ItemLongClickListener listener) {
+        this.mItemLongClickListner = listener;
+    }
+
+    public interface ItemLongClickListener {
+        void onItemLongClick(Track track);
+    }
+
 }

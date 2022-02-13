@@ -4,53 +4,56 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.uniqueAndroid.ximalaya.R;
 
-public class ConfirmDialog extends Dialog {
+public class ConfirmCheckBoxDialog extends Dialog {
 
-    private View mCancelSub;
-    private View mGiveUp;
+    private View mCancel;
+    private View mConfirm;
     private OnDialogActionClickListener mClickListener = null;
+    private CheckBox mCheckBox;
 
-    public ConfirmDialog(@NonNull Context context) {
+    public ConfirmCheckBoxDialog(@NonNull Context context) {
         this(context,0);
     }
 
-    public ConfirmDialog(@NonNull Context context, int themeResId) {
+    public ConfirmCheckBoxDialog(@NonNull Context context, int themeResId) {
         this(context, true, null);
     }
 
-    public ConfirmDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
+    public ConfirmCheckBoxDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_confirm);
+        setContentView(R.layout.dialog_check_box_confirm);
         initView();
         initListener();
     }
 
     private void initListener() {
-        mGiveUp.setOnClickListener(new View.OnClickListener() {
+        mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mClickListener != null) {
-                    mClickListener.onGiveUpClick();
+                    boolean checked = mCheckBox.isChecked();
+                    mClickListener.onConfirmClick(checked);
                     dismiss();
                 }
             }
         });
-        mCancelSub.setOnClickListener(new View.OnClickListener() {
+        mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mClickListener != null) {
-                    mClickListener.onCancelSubClick();
+                    mClickListener.onCancelClick();
                     dismiss();
                 }
             }
@@ -58,8 +61,9 @@ public class ConfirmDialog extends Dialog {
     }
 
     private void initView() {
-        mCancelSub = this.findViewById(R.id.dialog_button_cancel_sub);
-        mGiveUp = this.findViewById(R.id.dialog_button_give_up);
+        mCancel = this.findViewById(R.id.dialog_check_box_cancel);
+        mConfirm = this.findViewById(R.id.dialog_check_box_confirm);
+        mCheckBox = this.findViewById(R.id.dialog_check_box);
     }
 
 
@@ -68,7 +72,7 @@ public class ConfirmDialog extends Dialog {
     }
 
     public interface OnDialogActionClickListener {
-        void onCancelSubClick();
-        void onGiveUpClick();
+        void onCancelClick();
+        void onConfirmClick(boolean isCheck);
     }
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -23,6 +24,7 @@ import com.uniqueAndroid.ximalaya.interfaces.IHistoryCallback;
 import com.uniqueAndroid.ximalaya.presenters.HistoryPresenter;
 import com.uniqueAndroid.ximalaya.presenters.PlayerPresenter;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
+import com.uniqueAndroid.ximalaya.views.ConfirmCheckBoxDialog;
 import com.uniqueAndroid.ximalaya.views.UILoader;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
@@ -30,11 +32,12 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class HistoryFragment extends BaseFragment implements IHistoryCallback, TrackListAdapter.ItemClickListener {
+public class HistoryFragment extends BaseFragment implements IHistoryCallback, TrackListAdapter.ItemClickListener, TrackListAdapter.ItemLongClickListener, ConfirmCheckBoxDialog.OnDialogActionClickListener {
     private static final String TAG = "HistoryFragment";
     private UILoader mUiLoader;
     private TrackListAdapter mTrackListAdapter;
     private HistoryPresenter mHistoryPresenter;
+    private Track mCurrentClickHistoryItem = null;
 
     @Override
     protected View onSubViewLoaded(LayoutInflater layoutInflater, ViewGroup container) {
@@ -44,6 +47,14 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback, T
                 @Override
                 protected View getSuccessView(ViewGroup container) {
                     return createSuccessView(container);
+                }
+
+                @Override
+                protected View getEmptyView() {
+                    View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_empty_view, this, false);
+                    TextView tips = emptyView.findViewById(R.id.empty_view_tips_tv);
+                    tips.setText("没有历史记录");
+                    return emptyView;
                 }
             };
         } else {
@@ -79,6 +90,7 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback, T
         });
         mTrackListAdapter = new TrackListAdapter();
         mTrackListAdapter.setItemClickListener(this);
+        mTrackListAdapter.setItemLongClickListener(this);
         historyList.setAdapter(mTrackListAdapter);
         return successView;
     }
@@ -97,8 +109,12 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback, T
     @Override
     public void onHistoriesLoaded(List<Track> tracks) {
         LogUtil.d(TAG,"tracks size ---->" + tracks.size());
-        mTrackListAdapter.setData(tracks);
-        mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
+        if (tracks == null || tracks.size() == 0) {
+            mUiLoader.updateStatus(UILoader.UIStatus.EMPTY);
+        } else {
+            mTrackListAdapter.setData(tracks);
+            mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
+        }
     }
 
     @Override
@@ -116,5 +132,29 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback, T
         playerPresenter.setPlayList(detailData, position);
         Intent intent = new Intent(getActivity(), PlayerActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemLongClick(Track track) {
+        this.mCurrentClickHistoryItem = track;
+        ConfirmCheckBoxDialog dialog = new ConfirmCheckBoxDialog(getContext());
+        dialog.setOnDialogActionClickListener(this);
+        dialog.show();
+    }
+
+    @Override
+    public void onCancelClick() {
+
+    }
+
+    @Override
+    public void onConfirmClick(boolean isCheck) {
+        if (mHistoryPresenter != null && mCurrentClickHistoryItem != null) {
+            if (!isCheck) {
+                mHistoryPresenter.delHistory(mCurrentClickHistoryItem);
+            } else {
+                mHistoryPresenter.cleanHistories();
+            }
+        }
     }
 }

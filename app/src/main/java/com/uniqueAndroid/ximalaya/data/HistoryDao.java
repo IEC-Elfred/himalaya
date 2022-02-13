@@ -37,6 +37,8 @@ public class HistoryDao implements IHistoryDao {
             boolean isSuccess = false;
             try {
                 db = mXimalayaDBHelper.getWritableDatabase();
+                //避免重复
+                int delete = db.delete(Constants.HISTORY_TB_NAME, Constants.HISTORY_TRACK_ID + "=? ", new String[]{track.getDataId() + ""});
                 db.beginTransaction();
                 ContentValues values = new ContentValues();
                 //封装数据
@@ -73,7 +75,7 @@ public class HistoryDao implements IHistoryDao {
             try {
                 db = mXimalayaDBHelper.getWritableDatabase();
                 db.beginTransaction();
-                int delete = db.delete(Constants.HISTORY_TB_NAME, Constants.HISTORY_ID + "=? ", new String[]{track.getDataId() + ""});
+                int delete = db.delete(Constants.HISTORY_TB_NAME, Constants.HISTORY_TRACK_ID + "=? ", new String[]{track.getDataId() + ""});
                 LogUtil.d(TAG, "delete --> " + delete);
                 db.setTransactionSuccessful();
                 isSuccess = true;

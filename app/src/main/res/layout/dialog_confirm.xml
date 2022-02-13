@@ -25,7 +25,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/dialog_button_cancel_sub"
+                android:id="@+id/dialog_check_box_cancel"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -40,7 +40,7 @@
                 android:background="#dfdfdf" />
 
             <TextView
-                android:id="@+id/dialog_button_give_up"
+                android:id="@+id/dialog_check_box_confirm"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

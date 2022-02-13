@@ -17,6 +17,7 @@ public class RecommendPresenter implements IRecommendPresenter {
 
     private List<IRecommendViewCallback> callbacks = new ArrayList<>();
     private List<Album> mCurrentRecommend = null;
+    private List<Album> mAlbumList;
 
     private RecommendPresenter() {
 
@@ -37,16 +38,20 @@ public class RecommendPresenter implements IRecommendPresenter {
 
     @Override
     public void getRecommendList() {
+        //如果内容不为空，直接使用当前内容
+        if (mAlbumList != null && mAlbumList.size() > 0) {
+            handlerRecommendResult(mAlbumList);
+            return;
+        }
         updateLoading();
         XimalayaApi ximalayaApi = XimalayaApi.getXimalayaApi();
         ximalayaApi.getRecommendList(new IDataCallBack<GussLikeAlbumList>() {
             @Override
             public void onSuccess(GussLikeAlbumList gussLikeAlbumList) {
                 if (gussLikeAlbumList != null) {
-                    List<Album> albumList = gussLikeAlbumList.getAlbumList();
-                    albumList.addAll(gussLikeAlbumList.getAlbumList());
-                    //updateRecommendUI(albumList);
-                    handlerRecommendResult(albumList);
+                    mAlbumList = gussLikeAlbumList.getAlbumList();
+                    mAlbumList.addAll(gussLikeAlbumList.getAlbumList());
+                    handlerRecommendResult(mAlbumList);
                 }
             }
 

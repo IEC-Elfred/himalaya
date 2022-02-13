@@ -58,8 +58,8 @@ public class ConfirmDialog extends Dialog {
     }
 
     private void initView() {
-        mCancelSub = this.findViewById(R.id.dialog_button_cancel_sub);
-        mGiveUp = this.findViewById(R.id.dialog_button_give_up);
+        mCancelSub = this.findViewById(R.id.dialog_check_box_cancel);
+        mGiveUp = this.findViewById(R.id.dialog_check_box_confirm);
     }
 
 
