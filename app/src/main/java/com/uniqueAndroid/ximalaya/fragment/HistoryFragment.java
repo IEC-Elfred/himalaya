@@ -1,5 +1,6 @@
 package com.uniqueAndroid.ximalaya.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -13,12 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.uniqueAndroid.ximalaya.PlayerActivity;
 import com.uniqueAndroid.ximalaya.R;
 import com.uniqueAndroid.ximalaya.adapters.TrackListAdapter;
 import com.uniqueAndroid.ximalaya.base.BaseApplication;
 import com.uniqueAndroid.ximalaya.base.BaseFragment;
 import com.uniqueAndroid.ximalaya.interfaces.IHistoryCallback;
 import com.uniqueAndroid.ximalaya.presenters.HistoryPresenter;
+import com.uniqueAndroid.ximalaya.presenters.PlayerPresenter;
 import com.uniqueAndroid.ximalaya.utils.LogUtil;
 import com.uniqueAndroid.ximalaya.views.UILoader;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
@@ -27,7 +30,7 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class HistoryFragment extends BaseFragment implements IHistoryCallback {
+public class HistoryFragment extends BaseFragment implements IHistoryCallback, TrackListAdapter.ItemClickListener {
     private static final String TAG = "HistoryFragment";
     private UILoader mUiLoader;
     private TrackListAdapter mTrackListAdapter;
@@ -68,13 +71,14 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback {
         historyList.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                outRect.top = UIUtil.dip2px(view.getContext(), 5);
-                outRect.bottom = UIUtil.dip2px(view.getContext(), 5);
-                outRect.left = UIUtil.dip2px(view.getContext(), 5);
-                outRect.right = UIUtil.dip2px(view.getContext(), 5);
+                outRect.top = UIUtil.dip2px(view.getContext(), 2);
+                outRect.bottom = UIUtil.dip2px(view.getContext(), 2);
+                outRect.left = UIUtil.dip2px(view.getContext(), 2);
+                outRect.right = UIUtil.dip2px(view.getContext(), 2);
             }
         });
         mTrackListAdapter = new TrackListAdapter();
+        mTrackListAdapter.setItemClickListener(this);
         historyList.setAdapter(mTrackListAdapter);
         return successView;
     }
@@ -103,5 +107,14 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback {
         if (mHistoryPresenter != null) {
             mHistoryPresenter.unRegisterViewCallback(this);
         }
+    }
+
+    @Override
+    public void onItemClick(List<Track> detailData, int position) {
+        // 设置播放器的数据
+        PlayerPresenter playerPresenter = PlayerPresenter.getPlayerPresenter();
+        playerPresenter.setPlayList(detailData, position);
+        Intent intent = new Intent(getActivity(), PlayerActivity.class);
+        startActivity(intent);
     }
 }

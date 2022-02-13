@@ -46,6 +46,7 @@ public class XimalayaDBHelper extends SQLiteOpenHelper {
                 Constants.HISTORY_TRACK_ID + " integer," +
                 Constants.HISTORY_TITLE + " varchar," +
                 Constants.HISTORY_COVER + " varchar," +
+                Constants.HISTORY_AUTHOR + " varchar," +
                 Constants.HISTORY_PLAY_COUNT + " integer," +
                 Constants.HISTORY_DURATION + " integer," +
                 Constants.HISTORY_UPDATE_TIME + " integer);\n";
